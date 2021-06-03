@@ -4,7 +4,7 @@ import { Interessen } from "../../interessen/Interessen";
 
 @Index("email", ["email"], { unique: true })
 @Entity("user", { schema: "taskUPdb" })
-export class User {
+export class UserEntity {
   @Column("varchar", { primary: true, name: "username", length: 30 })
   username: string;
 

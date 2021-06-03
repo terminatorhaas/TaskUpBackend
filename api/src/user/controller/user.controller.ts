@@ -1,36 +1,36 @@
-import { Body, Controller, Get, Param, Put } from '@nestjs/common';
-import { Observable } from 'rxjs';
-import { User } from 'src/entity/User';
+import { Controller, Post, Body, Get, Param, Delete, Put } from '@nestjs/common';
 import { UserService } from '../service/user.service';
+import { User } from '../models/user.interface';
+import { Observable } from 'rxjs';
 
-@Controller('user')
+@Controller('users')
 export class UserController {
-
 
     constructor(private userService: UserService) { }
 
-    erstellen(@Body() user: User): Observable<User> {
+    @Post()
+    create(@Body() user: User): Observable<User> {
         return this.userService.create(user);
     }
 
     @Get(':username')
-    findenEins(@Param() params): Observable<User> {
+    findOne(@Param() params): Observable<User> {
         return this.userService.findOne(params.username);
     }
 
     @Get()
-    findenAlle(): Observable<User[]> {
+    findAll(): Observable<User[]> {
         return this.userService.findAll();
     }
 
-    @Get(':username')
-    loeschenEins(@Param('username') username: string): Observable<User> {
+    @Delete(':username')
+    deleteOne(@Param('username')username: string): Observable<any> {
         return this.userService.deleteOne(username);
     }
 
-    @Put('username')
-    aendernEins(@Param('username') username: string, @Body() user: User): Observable<any> {
-        return this.userService.updateOne(username, user);
+    @Put(':username')
+    updateOne(@Param('username') username: string, @Body() user: User): Observable<any> {
+        return this.userService.updateOne(username,user);
     }
-    
+
 }
