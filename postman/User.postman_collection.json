@@ -112,6 +112,17 @@
 				}
 			},
 			"response": []
+		},
+		{
+			"name": "User einloggen",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": ""
+				}
+			},
+			"response": []
 		}
 	]
 }

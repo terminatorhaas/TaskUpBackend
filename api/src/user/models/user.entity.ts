@@ -1,4 +1,4 @@
-import { Column, Entity, Index, ManyToMany } from "typeorm";
+import { BeforeInsert, Column, Entity, Index, ManyToMany } from "typeorm";
 import { Kalender } from "../../kalender/Kalender";
 import { Interessen } from "../../interessen/Interessen";
 
@@ -11,7 +11,7 @@ export class UserEntity {
   @Column("varchar", { name: "email", unique: true, length: 30 })
   email: string;
 
-  @Column("varchar", { name: "passwort", length: 20 })
+  @Column("varchar", { name: "passwort", length: 60 })
   passwort: string;
 
   @Column("varchar", { name: "vorname", length: 30 })
@@ -25,6 +25,11 @@ export class UserEntity {
 
   @Column("tinyint", { name: "admin_flag", width: 1 })
   adminFlag: boolean;
+
+  @BeforeInsert()
+  emailInKleinschreibung() {
+    this.email = this.email.toLowerCase();
+  }
 
   @ManyToMany(() => Kalender, (kalender) => kalender.users)
   kalenders: Kalender[];
