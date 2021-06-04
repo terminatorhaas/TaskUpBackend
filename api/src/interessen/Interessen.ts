@@ -1,5 +1,5 @@
 import { Column, Entity, Index, JoinTable, ManyToMany } from "typeorm";
-import { User } from "../entity/User";
+import { UserEntity } from "../user/models/user.entity";
 import { Aktivitaeten } from "../aktivitaeten/Aktivitaeten";
 
 @Index("interessenBezeichnung", ["interessenBezeichnung"], { unique: true })
@@ -15,7 +15,7 @@ export class Interessen {
   })
   interessenBezeichnung: string;
 
-  @ManyToMany(() => User, (user) => user.interessens)
+  @ManyToMany(() => UserEntity, (user) => user.interessens)
   @JoinTable({
     name: "user_interessen",
     joinColumns: [
@@ -26,7 +26,7 @@ export class Interessen {
     ],
     schema: "taskUPdb",
   })
-  users: User[];
+  users: UserEntity[];
 
   @ManyToMany(() => Aktivitaeten, (aktivitaeten) => aktivitaeten.interessens)
   aktivitaetens: Aktivitaeten[];

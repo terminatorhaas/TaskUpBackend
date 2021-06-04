@@ -6,7 +6,7 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
 } from "typeorm";
-import { User } from "../entity/User";
+import { UserEntity } from "../user/models/user.entity";
 import { Ereignis } from "../ereignis/Ereignis";
 
 @Entity("kalender", { schema: "taskUPdb" })
@@ -17,7 +17,7 @@ export class Kalender {
   @Column("varchar", { name: "bezeichnung", nullable: true, length: 150 })
   bezeichnung: string | null;
 
-  @ManyToMany(() => User, (user) => user.kalenders)
+  @ManyToMany(() => UserEntity, (user) => user.kalenders)
   @JoinTable({
     name: "user_kalender",
     joinColumns: [{ name: "kalenderID", referencedColumnName: "kalenderId" }],
@@ -26,7 +26,7 @@ export class Kalender {
     ],
     schema: "taskUPdb",
   })
-  users: User[];
+  users: UserEntity[];
 
   @OneToMany(() => Ereignis, (ereignis) => ereignis.kalender)
   ereignis: Ereignis[];
