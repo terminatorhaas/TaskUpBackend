@@ -1,9 +1,9 @@
 import { Column, Entity, JoinTable, ManyToMany, OneToMany, PrimaryGeneratedColumn } from "typeorm";
-import { Ereignis } from "../ereignis/Ereignis";
-import { Interessen } from "../interessen/Interessen";
+import { EreignisEntity } from "../../ereignis/ereignis.models/ereignis.entity";
+import { InteressenEntity } from "../../interessen/interessen.models/Interessen.entity";
 
 @Entity("aktivitaeten", { schema: "taskUPdb" })
-export class Aktivitaeten {
+export class AktivitaetenEntity {
   @PrimaryGeneratedColumn({ type: "int", name: "aktivitaetenID" })
   aktivitaetenId: number;
 
@@ -14,10 +14,10 @@ export class Aktivitaeten {
   })
   aktivitaetsBezeichnung: string | null;
 
-  @OneToMany(() => Ereignis, (ereignis) => ereignis.aktivitaeten)
-  ereignis: Ereignis[];
+  @OneToMany(() => EreignisEntity, (ereignis) => ereignis.aktivitaeten)
+  ereignis: EreignisEntity[];
 
-  @ManyToMany(() => Interessen, (interessen) => interessen.aktivitaetens)
+  @ManyToMany(() => InteressenEntity, (interessen) => interessen.aktivitaetens)
   @JoinTable({
     name: "aktivitaeten_interesse_kategorien",
     joinColumns: [
@@ -28,5 +28,5 @@ export class Aktivitaeten {
     ],
     schema: "taskUPdb",
   })
-  interessens: Interessen[];
+  interessens: InteressenEntity[];
 }

@@ -1,12 +1,15 @@
-import { Column, Entity, Index, JoinTable, ManyToMany } from "typeorm";
-import { UserEntity } from "../user/models/user.entity";
-import { Aktivitaeten } from "../aktivitaeten/Aktivitaeten";
+import { Column, Entity, Index, JoinTable, ManyToMany, PrimaryGeneratedColumn } from "typeorm";
+import { UserEntity } from "../../user/models/user.entity";
+import { AktivitaetenEntity } from "../../aktivitaeten/aktivitaeten.models/aktivitaeten.entity";
 
 @Index("interessenBezeichnung", ["interessenBezeichnung"], { unique: true })
 @Entity("interessen", { schema: "taskUPdb" })
-export class Interessen {
-  @Column("int", { primary: true, name: "interessenID" })
+export class InteressenEntity {
+  
+  
+  @PrimaryGeneratedColumn('increment', {name:"interessenID"})
   interessenId: number;
+  
 
   @Column("varchar", {
     name: "interessenBezeichnung",
@@ -28,6 +31,6 @@ export class Interessen {
   })
   users: UserEntity[];
 
-  @ManyToMany(() => Aktivitaeten, (aktivitaeten) => aktivitaeten.interessens)
-  aktivitaetens: Aktivitaeten[];
+  @ManyToMany(() => AktivitaetenEntity, (aktivitaeten) => aktivitaeten.interessens)
+  aktivitaetens: AktivitaetenEntity[];
 }
