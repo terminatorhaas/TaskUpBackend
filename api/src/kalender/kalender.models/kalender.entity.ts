@@ -6,11 +6,11 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
 } from "typeorm";
-import { UserEntity } from "../user/models/user.entity";
-import { Ereignis } from "../ereignis/Ereignis";
+import { UserEntity } from "../../user/models/user.entity";
+import { EreignisEntity } from "../../ereignis/ereignis.models/ereignis.entity";
 
 @Entity("kalender", { schema: "taskUPdb" })
-export class Kalender {
+export class KalenderEntity {
   @PrimaryGeneratedColumn({ type: "int", name: "kalenderID" })
   kalenderId: number;
 
@@ -28,6 +28,6 @@ export class Kalender {
   })
   users: UserEntity[];
 
-  @OneToMany(() => Ereignis, (ereignis) => ereignis.kalender)
-  ereignis: Ereignis[];
+  @OneToMany(() => EreignisEntity, (ereignis) => ereignis.kalender)
+  ereignis: EreignisEntity[];
 }

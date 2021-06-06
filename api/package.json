@@ -30,12 +30,13 @@
     "bcrypt": "^5.0.1",
     "debug": "^4.3.1",
     "mariadb": "^2.5.3",
+    "mysql2": "^2.2.5",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
     "rxjs": "^6.6.6",
     "snyk": "^1.621.0",
     "test": "^0.6.0",
-    "typeorm": "^0.2.33",
+    "typeorm": "^0.2.34",
     "typeorm-model-generator": "^0.4.5"
   },
   "devDependencies": {

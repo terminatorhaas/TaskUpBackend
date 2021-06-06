@@ -6,13 +6,13 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
 } from "typeorm";
-import { Aktivitaeten } from "../aktivitaeten/Aktivitaeten";
-import { Kalender } from "../kalender/Kalender";
+import { AktivitaetenEntity } from "../../aktivitaeten/aktivitaeten.models/aktivitaeten.entity";
+import {  KalenderEntity } from "../../kalender/kalender.models/kalender.entity";
 
 @Index("ereignisVerweistAufExistierendenKalender", ["kalenderId"], {})
 @Index("ereignisVerweistAufExistierendeAktivitaetsID", ["aktivitaetenId"], {})
 @Entity("ereignis", { schema: "taskUPdb" })
-export class Ereignis {
+export class EreignisEntity {
   @Column("int", { name: "aktivitaetenID" })
   aktivitaetenId: number;
 
@@ -31,19 +31,19 @@ export class Ereignis {
   @Column("datetime", { name: "ende_datum_uhr" })
   endeDatumUhr: Date;
 
-  @ManyToOne(() => Aktivitaeten, (aktivitaeten) => aktivitaeten.ereignis, {
+  @ManyToOne(() => AktivitaetenEntity, (aktivitaeten) => aktivitaeten.ereignis, {
     onDelete: "RESTRICT",
     onUpdate: "RESTRICT",
   })
   @JoinColumn([
     { name: "aktivitaetenID", referencedColumnName: "aktivitaetenId" },
   ])
-  aktivitaeten: Aktivitaeten;
+  aktivitaeten: AktivitaetenEntity;
 
-  @ManyToOne(() => Kalender, (kalender) => kalender.ereignis, {
+  @ManyToOne(() => KalenderEntity, (kalender) => kalender.ereignis, {
     onDelete: "RESTRICT",
     onUpdate: "RESTRICT",
   })
   @JoinColumn([{ name: "kalenderID", referencedColumnName: "kalenderId" }])
-  kalender: Kalender;
+  kalender: KalenderEntity;
 }
