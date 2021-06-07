@@ -1,11 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { UserEntity } from '../models/user.entity';
+import { UserEntity } from '../user.models/user.entity';
 import { Repository } from 'typeorm';
-import { User } from '../models/user.interface';
+import { User } from '../user.models/user.interface';
 import { Observable, from, throwError } from 'rxjs';
 import { switchMap, map, catchError} from 'rxjs/operators';
-import { AuthService } from '../../auth/service/auth.service';
+import { AuthService } from '../../auth/auth.service/auth.service';
 
 @Injectable()
 export class UserService {

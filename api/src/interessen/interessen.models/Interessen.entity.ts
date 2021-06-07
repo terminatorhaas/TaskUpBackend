@@ -1,5 +1,5 @@
 import { Column, Entity, Index, JoinTable, ManyToMany, PrimaryGeneratedColumn } from "typeorm";
-import { UserEntity } from "../../user/models/user.entity";
+import { UserEntity } from "../../user/user.models/user.entity";
 import { AktivitaetenEntity } from "../../aktivitaeten/aktivitaeten.models/aktivitaeten.entity";
 
 @Index("interessenBezeichnung", ["interessenBezeichnung"], { unique: true })

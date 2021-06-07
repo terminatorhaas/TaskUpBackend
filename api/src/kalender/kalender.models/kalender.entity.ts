@@ -6,7 +6,7 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
 } from "typeorm";
-import { UserEntity } from "../../user/models/user.entity";
+import { UserEntity } from "../../user/user.models/user.entity";
 import { EreignisEntity } from "../../ereignis/ereignis.models/ereignis.entity";
 
 @Entity("kalender", { schema: "taskUPdb" })

@@ -1,6 +1,6 @@
 import { Controller, Post, Body, Get, Param, Delete, Put } from '@nestjs/common';
-import { UserService } from '../service/user.service';
-import { User } from '../models/user.interface';
+import { UserService } from '../user.service/user.service';
+import { User } from '../user.models/user.interface';
 import { Observable, of } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 
