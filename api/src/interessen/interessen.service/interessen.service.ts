@@ -22,7 +22,7 @@ export class InteressenService{
 
                 return from(this.interessenRepository.save(neueInteresse)).pipe(
                     map((interesse: Interessen) => {
-                        const { ...result} = interesse;
+                        const { ...result } = interesse;
                         console.log("Neue Interesse: " + neueInteresse.interessenBezeichnung + " hinzugefügt.");
                         return result;
                     }),
@@ -31,17 +31,12 @@ export class InteressenService{
                 
     }
         
-/*
-    findOne(username: string): Observable<User> {
-        return from(this.userRepository.findOne({username})).pipe(
-            map((user: User) => {
-                const {passwort, ...result} = user;
-                console.log("User: " + username + " gefunden.");
-                return result;
-            } )
-        )
+
+    findOne(interessenBezeichnung: string): Observable<Interessen> {
+        console.log("Suche nach Interesse " + interessenBezeichnung);
+        return from(this.interessenRepository.findOne({interessenBezeichnung}));
     }
-*/
+
     findAll(): Observable<Interessen[]> {
         return from(this.interessenRepository.find()).pipe(
             map((interessen: Interessen[]) => {
@@ -50,18 +45,21 @@ export class InteressenService{
             })
         );
     }
-/*
-    deleteOne(interessenID: string): Observable<any> {
-        console.log("Interessen: " + interessenID + " gelöscht.");
-        return from(this.interessenRepository.delete(interessenID));
+
+    updateOne(interessenBezeichnung: string, interesse: Interessen): Observable<any> {
+        console.log("Interesse: " + interessenBezeichnung + " geändert.");
+        return this.findOne(interessenBezeichnung).pipe(
+            switchMap((oldInteresse: InteressenEntity) => {return this.interessenRepository.update(oldInteresse.interessenId, interesse)}))
+        }
+    
+
+    deleteOne(interessenBezeichnung: string): Observable<any> {
+        console.log("Interessen: " + interessenBezeichnung + " gelöscht.");
+        return this.findOne(interessenBezeichnung).pipe(
+            switchMap((oldInteresse: InteressenEntity) => {return this.interessenRepository.delete(oldInteresse.interessenId)}))
     }
-/*
-    updateOne(username: string, user: User): Observable<any> {
-        delete user.email;
-        delete user.passwort;
-        console.log("User: " + username + " geändert.");
-        return from(this.userRepository.update(username, user));
-    }
-*/
+
+
+
    
   }
