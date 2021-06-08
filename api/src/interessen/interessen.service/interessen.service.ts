@@ -15,19 +15,11 @@ export class InteressenService{
     create(interesse: Interessen): Observable<Interessen> {
 
                 console.log('interessenBezeichnung  = ' + interesse.interessenBezeichnung) ;        
-                const neueInteresse = new InteressenEntity();
-                
+                const neuesInteresse = new InteressenEntity();
                 console.log('interessenID  = ' + interesse.interessenID) ;
-                neueInteresse.interessenBezeichnung  = interesse.interessenBezeichnung;
+                neuesInteresse.interessenBezeichnung  = interesse.interessenBezeichnung;
 
-                return from(this.interessenRepository.save(neueInteresse)).pipe(
-                    map((interesse: Interessen) => {
-                        const { ...result } = interesse;
-                        console.log("Neue Interesse: " + neueInteresse.interessenBezeichnung + " hinzugefügt.");
-                        return result;
-                    }),
-                    catchError(err => throwError(err))
-                )
+                return from(this.interessenRepository.save(neuesInteresse));
                 
     }
         
