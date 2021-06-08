@@ -1,4 +1,4 @@
-export interface kalender{
-    kalenderID: number;
+export interface Kalender{
+    kalenderId: number;
     bezeichnung: string | null;
 }

@@ -1,4 +1,4 @@
 export interface Interessen{
-    interessenID?: number;
+    interessenId?: number;
     interessenBezeichnung?: string;
 }

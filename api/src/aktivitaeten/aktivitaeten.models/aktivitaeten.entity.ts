@@ -4,12 +4,12 @@ import { InteressenEntity } from "../../interessen/interessen.models/Interessen.
 
 @Entity("aktivitaeten", { schema: "taskUPdb" })
 export class AktivitaetenEntity {
-  @PrimaryGeneratedColumn({ type: "int", name: "aktivitaetenID" })
+  @PrimaryGeneratedColumn( "increment", {name: "aktivitaetenID" })
   aktivitaetenId: number;
 
   @Column("varchar", {
     name: "aktivitaets_bezeichnung",
-    nullable: true,
+    unique: true, //vorher "nullable" --> ist unique hier ok?
     length: 150,
   })
   aktivitaetsBezeichnung: string | null;

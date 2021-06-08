@@ -9,6 +9,11 @@ export class InteressenController {
 
     constructor(private interessenService: InteressenService) { }
 
+    @Post()
+    create(@Body() interessen: Interessen): Observable<Interessen> {
+        return this.interessenService.create(interessen);
+    }
+
     @Get(':interessenBezeichnung')
     findOne(@Param() params): Observable<Interessen> {
         return this.interessenService.findOne(params.interessenBezeichnung);
@@ -17,11 +22,6 @@ export class InteressenController {
     @Get()
     findAll(): Observable<Interessen[]> {
         return this.interessenService.findAll();
-    }
-
-    @Post()
-    create(@Body() Interessen: Interessen): Observable<Interessen> {
-        return this.interessenService.create(Interessen);
     }
 
     @Put(':interessenBezeichnung')

@@ -16,7 +16,7 @@ export class InteressenService{
 
                 console.log('interessenBezeichnung  = ' + interesse.interessenBezeichnung) ;        
                 const neuesInteresse = new InteressenEntity();
-                console.log('interessenID  = ' + interesse.interessenID) ;
+                console.log('interessenID  = ' + interesse.interessenId) ;
                 neuesInteresse.interessenBezeichnung  = interesse.interessenBezeichnung;
 
                 return from(this.interessenRepository.save(neuesInteresse));
@@ -41,14 +41,14 @@ export class InteressenService{
     updateOne(interessenBezeichnung: string, interesse: Interessen): Observable<any> {
         console.log("Interesse: " + interessenBezeichnung + " geändert.");
         return this.findOne(interessenBezeichnung).pipe(
-            switchMap((oldInteresse: InteressenEntity) => {return this.interessenRepository.update(oldInteresse.interessenId, interesse)}))
+            switchMap((oldInteresse: Interessen) => {return this.interessenRepository.update(oldInteresse.interessenId, interesse)}))
         }
     
 
     deleteOne(interessenBezeichnung: string): Observable<any> {
         console.log("Interessen: " + interessenBezeichnung + " gelöscht.");
         return this.findOne(interessenBezeichnung).pipe(
-            switchMap((oldInteresse: InteressenEntity) => {return this.interessenRepository.delete(oldInteresse.interessenId)}))
+            switchMap((oldInteresse: Interessen) => {return this.interessenRepository.delete(oldInteresse.interessenId)}))
     }
 
 
