@@ -14,6 +14,12 @@ export class AktivitaetenEntity {
   })
   aktivitaetsBezeichnung: string | null;
 
+  @Column("varchar", {
+    name: "aktivitaets_satz",
+    length: 250,
+  })
+  aktivitaetsSatz: string | null;
+
   @OneToMany(() => EreignisEntity, (ereignis) => ereignis.aktivitaeten)
   ereignis: EreignisEntity[];
 
