@@ -31,9 +31,9 @@ export class UserEntity {
     this.email = this.email.toLowerCase();
   }
 
-  @ManyToMany(() => KalenderEntity, (kalender) => kalender.users)
+  @ManyToMany(type => KalenderEntity, kalender => kalender.users)
   kalenders: KalenderEntity[];
 
-  @ManyToMany(() => InteressenEntity, (interessen) => interessen.users)
+  @ManyToMany(type => InteressenEntity, interessen => interessen.users)
   interessens: InteressenEntity[];
 }

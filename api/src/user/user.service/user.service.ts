@@ -3,15 +3,18 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { UserEntity } from '../user.models/user.entity';
 import { Repository } from 'typeorm';
 import { User } from '../user.models/user.interface';
+import { Interessen } from '../../interessen/interessen.models/interessen.interface';
 import { Observable, from, throwError } from 'rxjs';
 import { switchMap, map, catchError} from 'rxjs/operators';
 import { AuthService } from '../../auth/auth.service/auth.service';
+import { InteressenService } from 'src/interessen/interessen.service/interessen.service';
 
 @Injectable()
 export class UserService {
 
     constructor(
         @InjectRepository(UserEntity) private readonly userRepository: Repository<UserEntity>,
+        readonly interessenService: InteressenService,
         private authService: AuthService
     ) {}
 
@@ -26,6 +29,7 @@ export class UserService {
                 neuerUser.nachname  = user.nachname;
                 neuerUser.zeitzone  = user.zeitzone;
                 neuerUser.adminFlag = user.adminFlag;
+                neuerUser.interessens = [];
 
                 return from(this.userRepository.save(neuerUser)).pipe(
                     map((user: User) => {
@@ -105,4 +109,22 @@ export class UserService {
     findByMail(email: string): Observable<User> {
         return from(this.userRepository.findOne({email}));
     }
+
+    tieToInteresse(username: string, interessenBezeichnung: string): Observable<any> {
+        return this.interessenService.getInteresse(interessenBezeichnung).pipe(
+            switchMap((mappedInteresse: Interessen) => this.findOne(username).pipe(
+                map((mappedUser: User) => {
+                console.log("Auf User: " + mappedUser.username);
+                //mappedUser.interessens.push(mappedInteresse)
+                var interessenArray: Interessen[] = [];
+                interessenArray.push(mappedInteresse);
+                mappedUser.interessens = interessenArray;
+                console.log("User: " + mappedUser.username + " zugeordnet zu Interesse: " + mappedInteresse.interessenBezeichnung);
+                //return from(this.userRepository.update(mappedUser.username, mappedUser)); 
+                return from(this.userRepository.save(mappedUser));
+                }))
+        ))
+
+    }
+    
 }

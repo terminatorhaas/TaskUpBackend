@@ -3,6 +3,7 @@ import { UserService } from '../user.service/user.service';
 import { User } from '../user.models/user.interface';
 import { Observable, of } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
+import { Interessen } from 'src/interessen/interessen.models/interessen.interface';
 
 @Controller('users')
 export class UserController {
@@ -45,6 +46,11 @@ export class UserController {
     @Put(':username')
     updateOne(@Param('username') username: string, @Body() user: User): Observable<any> {
         return this.userService.updateOne(username,user);
+    }
+
+    @Put(':username/bindInteresse')
+    tieToInteresse(@Param('username') username: string, @Body('interessenBezeichnung') interessenBezeichnung?: string): Observable<any> {
+        return this.userService.tieToInteresse(username, interessenBezeichnung);
     }
 
 }

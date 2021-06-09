@@ -5,6 +5,8 @@ import { InteressenEntity } from '../interessen.models/Interessen.entity';
 import { Observable, from, throwError } from 'rxjs';
 import { switchMap, map, catchError} from 'rxjs/operators';
 import { Interessen } from '../interessen.models/interessen.interface';
+import { User } from 'src/user/user.models/user.interface';
+import { UserEntity } from 'src/user/user.models/user.entity';
 
 @Injectable()
 export class InteressenService{
@@ -13,14 +15,12 @@ export class InteressenService{
     ) {}
 
     create(interesse: Interessen): Observable<Interessen> {
-
                 console.log('interessenBezeichnung  = ' + interesse.interessenBezeichnung) ;        
                 const neuesInteresse = new InteressenEntity();
                 console.log('interessenID  = ' + interesse.interessenId) ;
                 neuesInteresse.interessenBezeichnung  = interesse.interessenBezeichnung;
 
-                return from(this.interessenRepository.save(neuesInteresse));
-                
+                return from(this.interessenRepository.save(neuesInteresse));           
     }
         
 
@@ -51,7 +51,10 @@ export class InteressenService{
             switchMap((oldInteresse: Interessen) => {return this.interessenRepository.delete(oldInteresse.interessenId)}))
     }
 
-
+    public getInteresse(interessenBezeichnung: string): Observable<Interessen> {
+        console.log("Suche nach Interesse " + interessenBezeichnung);
+        return from(this.interessenRepository.findOne({interessenBezeichnung}));
+    }
 
    
   }

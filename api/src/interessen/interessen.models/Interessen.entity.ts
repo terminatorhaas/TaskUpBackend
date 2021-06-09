@@ -18,7 +18,7 @@ export class InteressenEntity {
   })
   interessenBezeichnung: string;
 
-  @ManyToMany(() => UserEntity, (user) => user.interessens)
+  @ManyToMany(type => UserEntity, user => user.interessens)
   @JoinTable({
     name: "user_interessen",
     joinColumns: [
@@ -31,6 +31,6 @@ export class InteressenEntity {
   })
   users: UserEntity[];
 
-  @ManyToMany(() => AktivitaetenEntity, (aktivitaeten) => aktivitaeten.interessens)
+  @ManyToMany(type => AktivitaetenEntity, (aktivitaeten) => aktivitaeten.interessens)
   aktivitaetens: AktivitaetenEntity[];
 }
