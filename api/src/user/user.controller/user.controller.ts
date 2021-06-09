@@ -53,4 +53,9 @@ export class UserController {
         return this.userService.tieToInteresse(username, interessenBezeichnung);
     }
 
+    @Get(':username/bindInteresse')
+    findeInteressenZuUser(@Param('username') username: string): Observable<Interessen[]> {
+            return this.userService.findeInteressenZuUser(username);
+    }
+
 }

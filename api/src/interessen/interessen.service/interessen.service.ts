@@ -1,12 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Like, Raw, Repository } from 'typeorm';
 import { InteressenEntity } from '../interessen.models/Interessen.entity';
 import { Observable, from, throwError } from 'rxjs';
 import { switchMap, map, catchError} from 'rxjs/operators';
 import { Interessen } from '../interessen.models/interessen.interface';
+import { In } from 'typeorm';
 import { User } from 'src/user/user.models/user.interface';
 import { UserEntity } from 'src/user/user.models/user.entity';
+import { UserService } from 'src/user/user.service/user.service';
 
 @Injectable()
 export class InteressenService{
@@ -56,5 +58,39 @@ export class InteressenService{
         return from(this.interessenRepository.findOne({interessenBezeichnung}));
     }
 
+    public getInteresseZuUser(username1: string): Observable<Interessen[]> {
+        return from(this.interessenRepository.find({
+            where: {
+                users: {
+                    username: username1
+                },
+            },
+            relations: ['users'],
+            /*
+            join: {
+                alias: "username",
+                leftJoinAndSelect: {
+                    users: "username.users"
+                }
+            },
+            loadRelationIds: true,
+            where: {
+                users: username1
+            },
+    */
+    
+    
+   /*         relations: ['users'],
+    loadRelationIds: true,
+    where: {
+        
+    }
+*/
+        
+        }));
+
+        }
+
+    }
    
-  }
+  

@@ -117,6 +117,7 @@ export class UserService {
                 console.log("Auf User: " + mappedUser.username);
                 //mappedUser.interessens.push(mappedInteresse)
                 var interessenArray: Interessen[] = [];
+                interessenArray = mappedUser.interessens;
                 interessenArray.push(mappedInteresse);
                 mappedUser.interessens = interessenArray;
                 console.log("User: " + mappedUser.username + " zugeordnet zu Interesse: " + mappedInteresse.interessenBezeichnung);
@@ -126,5 +127,32 @@ export class UserService {
         ))
 
     }
+
+
+
+
+    findeInteressenZuUser(username: string): Observable<Interessen[]> {
+        return this.interessenService.getInteresseZuUser(username);
+            //gib mir Interessen zum User aus
+    }
+
+    removeTieFromInteresse(username: string, interessenBezeichnung: string): Observable<any> {
+        return this.interessenService.getInteresse(interessenBezeichnung).pipe(
+            switchMap((mappedInteresse: Interessen) => this.findOne(username).pipe(
+                map((mappedUser: User) => {
+                console.log("Auf User: " + mappedUser.username);
+                //mappedUser.interessens.push(mappedInteresse)
+                var interessenArray: Interessen[] = [];
+                interessenArray = mappedUser.interessens;
+                interessenArray.push(mappedInteresse);
+                mappedUser.interessens = interessenArray;
+                console.log("User: " + mappedUser.username + " zugeordnet zu Interesse: " + mappedInteresse.interessenBezeichnung);
+                //return from(this.userRepository.update(mappedUser.username, mappedUser)); 
+                return from(this.userRepository.save(mappedUser));
+                }))
+        ))
+
+    }
+
     
 }

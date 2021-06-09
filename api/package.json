@@ -28,6 +28,7 @@
     "@nestjs/platform-express": "^7.6.15",
     "@nestjs/typeorm": "^7.1.5",
     "bcrypt": "^5.0.1",
+    "dataloader": "^2.0.0",
     "debug": "^4.3.1",
     "mariadb": "^2.5.3",
     "mysql2": "^2.2.5",
