@@ -1,6 +1,7 @@
 import { BeforeInsert, Column, Entity, Index, ManyToMany } from "typeorm";
 import { KalenderEntity } from "../../kalender/kalender.models/kalender.entity";
 import { InteressenEntity } from "../../interessen/interessen.models/Interessen.entity";
+import { UserRole } from "./user.interface";
 
 @Index("email", ["email"], { unique: true })
 @Entity("user", { schema: "taskUPdb" })
@@ -11,7 +12,7 @@ export class UserEntity {
   @Column("varchar", { name: "email", unique: true, length: 30 })
   email: string;
 
-  @Column("varchar", { name: "passwort", length: 60 })
+  @Column("varchar", { name: "passwort", length: 60 ,select: false})
   passwort: string;
 
   @Column("varchar", { name: "vorname", length: 30 })
@@ -25,6 +26,9 @@ export class UserEntity {
 
   @Column("tinyint", { name: "admin_flag", width: 1 })
   adminFlag: boolean;
+
+  @Column({type: 'enum', enum: UserRole, default: UserRole.USER})
+    role: UserRole;
 
   @BeforeInsert()
   emailInKleinschreibung() {

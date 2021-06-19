@@ -1,5 +1,4 @@
 import { Interessen } from "src/interessen/interessen.models/interessen.interface";
-import { KalenderEntity } from "src/kalender/kalender.models/kalender.entity";
 import { Kalender } from "src/kalender/kalender.models/kalender.interface";
 
 export interface User {
@@ -12,4 +11,10 @@ zeitzone?: string;
 adminFlag?: boolean;
 interessens?: Interessen[];
 kalenders?: Kalender[];
+role?: UserRole;
 }
+
+export enum UserRole {
+    ADMIN = 'admin',
+    USER = 'user'
+} 
