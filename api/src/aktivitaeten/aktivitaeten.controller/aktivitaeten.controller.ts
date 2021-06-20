@@ -28,16 +28,18 @@ export class AktivitaetenController {
     findAll(): Observable<Aktivitaeten[]> {
         return this.aktivitaetenService.findAll();
     }
-
+/*
     @hasRoles(UserRole.ADMIN)
     @UseGuards(JwtAuthGuard, RolesGuard)
+*/
     @Put(':aktivitaetsBezeichnung')
     updateOne(@Param('aktivitaetsBezeichnung') aktivitaetsBezeichnung: string, @Body() aktivitaet: Aktivitaeten): Observable<any> {
         return this.aktivitaetenService.updateOne(aktivitaetsBezeichnung, aktivitaet);
     }
-    
+/*    
     @hasRoles(UserRole.ADMIN)
     @UseGuards(JwtAuthGuard, RolesGuard)
+*/  
     @Delete(':aktivitaetsBezeichnung')
     deleteOne(@Param('aktivitaetsBezeichnung') aktivitaetsBezeichnung: string): Observable<any> {
         return this.aktivitaetenService.deleteOne(aktivitaetsBezeichnung);
