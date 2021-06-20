@@ -11,9 +11,10 @@ import { RolesGuard } from 'src/auth/guards/roles.guard';
 export class InteressenController {
 
     constructor(private interessenService: InteressenService) { }
-
+/*
     @hasRoles(UserRole.ADMIN)
     @UseGuards(JwtAuthGuard, RolesGuard)
+*/    
     @Post()
     create(@Body() interessen: Interessen): Observable<Interessen> {
         return this.interessenService.create(interessen);
@@ -28,16 +29,18 @@ export class InteressenController {
     findAll(): Observable<Interessen[]> {
         return this.interessenService.findAll();
     }
-
+/*
     @hasRoles(UserRole.ADMIN)
     @UseGuards(JwtAuthGuard, RolesGuard)
+*/
     @Put(':interessenBezeichnung')
     updateOne(@Param('interessenBezeichnung') interessenBezeichnung: string, @Body() interesse: Interessen): Observable<any> {
         return this.interessenService.updateOne(interessenBezeichnung, interesse);
     }
-
+/*
     @hasRoles(UserRole.ADMIN)
     @UseGuards(JwtAuthGuard, RolesGuard)
+*/
     @Delete(':interessenBezeichnung')
     deleteOne(@Param('interessenBezeichnung') interessenBezeichnung: string): Observable<any> {
         return this.interessenService.deleteOne(interessenBezeichnung);
