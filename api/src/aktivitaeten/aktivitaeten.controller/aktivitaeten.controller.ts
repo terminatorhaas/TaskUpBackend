@@ -11,9 +11,10 @@ import { AktivitaetenService } from '../aktivitaeten.service/aktivitaeten.servic
 export class AktivitaetenController {
 
     constructor(private aktivitaetenService: AktivitaetenService) { }
-
+/*
     @hasRoles(UserRole.ADMIN)
     @UseGuards(JwtAuthGuard, RolesGuard)
+*/    
     @Post()
     create(@Body() aktivitaet: Aktivitaeten): Observable<Aktivitaeten> {
         return this.aktivitaetenService.create(aktivitaet);
