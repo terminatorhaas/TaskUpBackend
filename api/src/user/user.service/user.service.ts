@@ -9,6 +9,10 @@ import { switchMap, map, catchError} from 'rxjs/operators';
 import { AuthService } from '../../auth/auth.service/auth.service';
 import { InteressenService } from 'src/interessen/interessen.service/interessen.service';
 import { UserRole } from "../user.models/user.interface";
+import { UserInteresseEntity } from 'src/userInteresse/userInteresse.models/userInteresse.entity';
+import { UserInteresse } from 'src/userInteresse/userInteresse.models/userInteresse';
+import { InteressenEntity } from 'src/interessen/interessen.models/Interessen.entity';
+import { UserInteresseController } from 'src/userInteresse/userInteresse.controller/user-interesse.controller';
 
 
 @Injectable()
@@ -116,21 +120,56 @@ export class UserService {
     }
 
     tieToInteresse(username: string, interessenBezeichnung: string): Observable<any> {
+        return null;
+        /*
+        return from(this.findOne(username).pipe(
+            switchMap((mappedUser: UserEntity) => {return this.interessenService.getInteresseZuUser(mappedUser).pipe(
+                switchMap((mappedInteressen: Interessen[]) => {
+                    return this.interessenService.findOne(interessenBezeichnung).pipe(
+                        switchMap((mappedInteresse: Interessen) => {
+                            const neuesInteresse: UserInteresse = {
+                                interessenID: mappedInteresse,
+                                username: mappedUser
+                            };
+                            var userInteressenArray: UserInteresse[];
+                                for(var i = 0; i < mappedInteressen.length; i++) {
+                                    var neuesUserInteresse: UserInteresse = new UserInteresseEntity();
+                                    neuesUserInteresse.username = mappedUser;
+                                    neuesUserInteresse.interessenID = mappedInteressen[i];
+                                    userInteressenArray.push(neuesUserInteresse)
+                                }
+                                userInteressenArray.push(neuesInteresse);
+                                mappedUser.interessens = userInteressenArray;
+                                return from(this.userRepository.save(mappedUser));
+                        })
+                        
+                    )
+                }
+                )
+            ) })));
+
+
+
+        /*
         return this.interessenService.getInteresse(interessenBezeichnung).pipe(
-            switchMap((mappedInteresse: Interessen) => this.findOne(username).pipe(
-                map((mappedUser: User) => {
+            switchMap((mappedInteresse: InteressenEntity) => this.findOne(username).pipe(
+                map((mappedUser: UserEntity) => {
                 console.log("Auf User: " + mappedUser.username);
-                //mappedUser.interessens.push(mappedInteresse)
-                var interessenArray: Interessen[] = [];
-                interessenArray = mappedUser.interessens;
-                interessenArray.push(mappedInteresse);
-                mappedUser.interessens = interessenArray;
+                //mappedUser.interessens.push(mappedInteresse.interessenId)
+                const neuesInteresse: UserInteresse = {
+                    interessenID: mappedInteresse,
+                    username: mappedUser
+                };
+                if (mappedUser.interessens == undefined) {
+                    mappedUser.interessens = []
+                    }
+                mappedUser.interessens.push(neuesInteresse);
                 console.log("User: " + mappedUser.username + " zugeordnet zu Interesse: " + mappedInteresse.interessenBezeichnung);
                 //return from(this.userRepository.update(mappedUser.username, mappedUser)); 
                 return from(this.userRepository.save(mappedUser));
                 }))
         ))
-
+                */
     }
 
     updateRoleOfUser(username: string, role: string): Observable<any> {
@@ -156,20 +195,20 @@ export class UserService {
 
 
     findeInteressenZuUser(username: string): Observable<Interessen[]> {
-        return this.interessenService.getInteresseZuUser(username);
-            //gib mir Interessen zum User aus
+
+        return from(this.findOne(username).pipe(
+            switchMap((mappedUser: User) => {
+                return this.interessenService.getInteresseZuUser(mappedUser) })));
     }
 
     removeTieFromInteresse(username: string, interessenBezeichnung: string): Observable<any> {
         return this.interessenService.getInteresse(interessenBezeichnung).pipe(
-            switchMap((mappedInteresse: Interessen) => this.findOne(username).pipe(
-                map((mappedUser: User) => {
+            switchMap((mappedInteresse: InteressenEntity) => this.findOne(username).pipe(
+                map((mappedUser: UserEntity) => {
                 console.log("Auf User: " + mappedUser.username);
                 //mappedUser.interessens.push(mappedInteresse)
-                var interessenArray: Interessen[] = [];
-                interessenArray = mappedUser.interessens;
-                interessenArray.push(mappedInteresse);
-                mappedUser.interessens = interessenArray;
+                for(let v of mappedUser.interessens) {
+                }
                 console.log("User: " + mappedUser.username + " zugeordnet zu Interesse: " + mappedInteresse.interessenBezeichnung);
                 //return from(this.userRepository.update(mappedUser.username, mappedUser)); 
                 return from(this.userRepository.save(mappedUser));

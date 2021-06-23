@@ -1,7 +1,7 @@
-import { BeforeInsert, Column, Entity, Index, ManyToMany } from "typeorm";
+import { BeforeInsert, Column, Entity, Index, ManyToMany, OneToMany } from "typeorm";
 import { KalenderEntity } from "../../kalender/kalender.models/kalender.entity";
-import { InteressenEntity } from "../../interessen/interessen.models/Interessen.entity";
 import { UserRole } from "./user.interface";
+import { UserInteresseEntity } from "src/userInteresse/userInteresse.models/userInteresse.entity";
 
 @Index("email", ["email"], { unique: true })
 @Entity("user", { schema: "taskUPdb" })
@@ -12,7 +12,7 @@ export class UserEntity {
   @Column("varchar", { name: "email", unique: true, length: 30 })
   email: string;
 
-  @Column("varchar", { name: "passwort", length: 60 ,select: false})
+  @Column("varchar", { name: "passwort", length: 60})
   passwort: string;
 
   @Column("varchar", { name: "vorname", length: 30 })
@@ -36,8 +36,8 @@ export class UserEntity {
   }
 
   @ManyToMany(type => KalenderEntity, kalender => kalender.users)
-  kalenders: KalenderEntity[];
+  public kalenders: KalenderEntity[];
 
-  @ManyToMany(type => InteressenEntity, interessen => interessen.users)
-  interessens: InteressenEntity[];
+  @OneToMany(type => UserInteresseEntity, userInteressen => userInteressen.username)
+  public interessens: UserInteresseEntity[];
 }
