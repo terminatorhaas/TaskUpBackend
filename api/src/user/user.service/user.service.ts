@@ -54,13 +54,7 @@ export class UserService {
     }
 
     findOne(username: string): Observable<User> {
-        return from(this.userRepository.findOne({username})).pipe(
-            map((user: User) => {
-                const {passwort, ...result} = user;
-                console.log("User: " + username + " gefunden.");
-                return result;
-            } )
-        )
+        return from(this.userRepository.findOne({username}));
     }
 
     findAll(): Observable<User[]> {
@@ -119,19 +113,16 @@ export class UserService {
         return from(this.userRepository.findOne({email}));
     }
 
-    tieToInteresse(username: string, interessenBezeichnung: string): Observable<any> {
-        return null;
-        /*
+    addTieToInteresse(username: string, interessenBezeichnung: string): Observable<any> {
         return from(this.findOne(username).pipe(
             switchMap((mappedUser: UserEntity) => {return this.interessenService.getInteresseZuUser(mappedUser).pipe(
                 switchMap((mappedInteressen: Interessen[]) => {
                     return this.interessenService.findOne(interessenBezeichnung).pipe(
                         switchMap((mappedInteresse: Interessen) => {
-                            const neuesInteresse: UserInteresse = {
-                                interessenID: mappedInteresse,
-                                username: mappedUser
-                            };
-                            var userInteressenArray: UserInteresse[];
+                            var neuesInteresse: UserInteresseEntity = new UserInteresseEntity();
+                                neuesInteresse.username = mappedUser;
+                                neuesInteresse.interessenID = mappedInteresse;
+                            var userInteressenArray: UserInteresseEntity[] = [];
                                 for(var i = 0; i < mappedInteressen.length; i++) {
                                     var neuesUserInteresse: UserInteresse = new UserInteresseEntity();
                                     neuesUserInteresse.username = mappedUser;
@@ -192,6 +183,8 @@ export class UserService {
         }
         return from(this.userRepository.update(mappedUser.username,mappedUser ));} ));                
     }
+
+
 
 
     findeInteressenZuUser(username: string): Observable<Interessen[]> {
