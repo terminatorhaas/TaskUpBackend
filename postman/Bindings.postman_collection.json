@@ -1,0 +1,67 @@
+{
+	"info": {
+		"_postman_id": "c2781043-4080-4be5-8f89-72566e6edfb7",
+		"name": "Bindings",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "User an Interesse binden",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"interessenBezeichnung\": \"Fahrrad fahren\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/users/Jeff420/bindInteresse",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"users",
+						"Jeff420",
+						"bindInteresse"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Interessen zu User bekommen",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:3000/users/Jeff421/bindInteresse",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"users",
+						"Jeff421",
+						"bindInteresse"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

@@ -59,7 +59,16 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": ""
+					"raw": "http://localhost:3000/users/Jeff420",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"users",
+						"Jeff420"
+					]
 				}
 			},
 			"response": []
@@ -91,7 +100,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"username\": \"Peter45\"\r\n}",
+					"raw": "    {\r\n        \"username\": \"Jeff420\",\r\n        \"email\": \"jefferey444@gmail.com\",\r\n        \"vorname\": \"Jefferey\",\r\n        \"nachname\": \"Geoff\",\r\n        \"zeitzone\": \"BFT\",\r\n        \"adminFlag\": 0\r\n    }",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -99,7 +108,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:3000/users/Peter44",
+					"raw": "http://localhost:3000/users/Jeff420",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -107,7 +116,7 @@
 					"port": "3000",
 					"path": [
 						"users",
-						"Peter44"
+						"Jeff420"
 					]
 				}
 			},
@@ -116,10 +125,28 @@
 		{
 			"name": "User einloggen",
 			"request": {
-				"method": "GET",
+				"method": "POST",
 				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"email\": \"man@fred.com\",\r\n    \"passwort\": \"Busfahrer***\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
 				"url": {
-					"raw": ""
+					"raw": "http://localhost:3000/users/login",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"users",
+						"login"
+					]
 				}
 			},
 			"response": []

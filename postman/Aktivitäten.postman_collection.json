@@ -1,0 +1,137 @@
+{
+	"info": {
+		"_postman_id": "bdff6910-9b93-46bf-a400-17d961369f05",
+		"name": "Aktivitäten",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Aktivität speichern",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"aktivitaetsBezeichnung\": \"Carsten\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/aktivitaeten",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"aktivitaeten"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Alle Aktivitäten lesen",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/aktivitaeten",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"aktivitaeten"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Aktivität ändern",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"aktivitaetsBezeichnung\": \"Manuel\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/aktivitaeten/Carsten",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"aktivitaeten",
+						"Carsten"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Eine Aktivität lesen",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/aktivitaeten/Manuel",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"aktivitaeten",
+						"Manuel"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Aktivität löschen",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/aktivitaeten/Manuel",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"aktivitaeten",
+						"Manuel"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
