@@ -54,8 +54,8 @@ export class UserController {
     }
 
     @Put(':username/bindInteresse')
-    tieToInteresse(@Param('username') username: string, @Body('interessenBezeichnung') interessenBezeichnung?: string): Observable<any> {
-        return this.userService.tieToInteresse(username, interessenBezeichnung);
+    addTieToInteresse(@Param('username') username: string, @Body('interessenBezeichnung') interessenBezeichnung?: string): Observable<any> {
+        return this.userService.addTieToInteresse(username, interessenBezeichnung);
     }
 
     @Get(':username/bindInteresse')
