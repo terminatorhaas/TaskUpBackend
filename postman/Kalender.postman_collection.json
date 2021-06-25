@@ -72,7 +72,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"kalenderId\": 2,\r\n    \"bezeichnung\": \"KEGGI\",\r\n    \"users\": \"M4nny\"\r\n}",
+					"raw": "{\r\n    \"bezeichnung\": \"ALFRED1\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -80,7 +80,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:3000/kalender/2",
+					"raw": "http://localhost:3000/kalender/1",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -88,7 +88,7 @@
 					"port": "3000",
 					"path": [
 						"kalender",
-						"2"
+						"1"
 					]
 				}
 			},
@@ -129,10 +129,19 @@
 		{
 			"name": "Kalender löschen",
 			"request": {
-				"method": "GET",
+				"method": "DELETE",
 				"header": [],
 				"url": {
-					"raw": ""
+					"raw": "http://localhost:3000/kalender/4",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"kalender",
+						"4"
+					]
 				}
 			},
 			"response": []
