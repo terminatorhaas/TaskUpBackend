@@ -44,6 +44,6 @@ export class EreignisEntity {
     onDelete: "RESTRICT",
     onUpdate: "RESTRICT",
   })
-  @JoinColumn([{ name: "kalenderID", referencedColumnName: "kalenderId" }])
+  @JoinColumn([{ name: "kalenderID", referencedColumnName: "kalenderID" }])
   kalender: KalenderEntity;
 }

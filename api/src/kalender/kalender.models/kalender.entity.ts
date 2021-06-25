@@ -1,32 +1,17 @@
-import {
-  Column,
-  Entity,
-  JoinTable,
-  ManyToMany,
-  OneToMany,
-  PrimaryGeneratedColumn,
-} from "typeorm";
-import { UserEntity } from "../../user/user.models/user.entity";
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { EreignisEntity } from "../../ereignis/ereignis.models/ereignis.entity";
+import { UserKalenderEntity } from "src/userKalender/userKalender.models/userKalender.entity";
 
 @Entity("kalender", { schema: "taskUPdb" })
 export class KalenderEntity {
-  @PrimaryGeneratedColumn({ type: "int", name: "kalenderID" })
-  kalenderId: number;
+  @PrimaryGeneratedColumn('increment', { name:"kalenderID" })
+  kalenderID: number;
 
   @Column("varchar", { name: "bezeichnung", nullable: true, length: 150 })
   bezeichnung: string | null;
 
-  @ManyToMany(() => UserEntity, (user) => user.kalenders)
-  @JoinTable({
-    name: "user_kalender",
-    joinColumns: [{ name: "kalenderID", referencedColumnName: "kalenderId" }],
-    inverseJoinColumns: [
-      { name: "username", referencedColumnName: "username" },
-    ],
-    schema: "taskUPdb",
-  })
-  users: UserEntity[];
+  @OneToMany(type => UserKalenderEntity, userKalender => userKalender.kalenderID)
+  userKalenders: UserKalenderEntity[];
 
   @OneToMany(() => EreignisEntity, (ereignis) => ereignis.kalender)
   ereignis: EreignisEntity[];

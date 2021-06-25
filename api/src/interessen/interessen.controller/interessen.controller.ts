@@ -20,9 +20,9 @@ export class InteressenController {
         return this.interessenService.create(interessen);
     }
 
-    @Get(':interessenBezeichnung')
+    @Get(':interessenID')
     findOne(@Param() params): Observable<Interessen> {
-        return this.interessenService.findOne(params.interessenBezeichnung);
+        return this.interessenService.findOne(params.interessenID);
     }
 
     @Get()
@@ -33,17 +33,17 @@ export class InteressenController {
     @hasRoles(UserRole.ADMIN)
     @UseGuards(JwtAuthGuard, RolesGuard)
 */
-    @Put(':interessenBezeichnung')
-    updateOne(@Param('interessenBezeichnung') interessenBezeichnung: string, @Body() interesse: Interessen): Observable<any> {
-        return this.interessenService.updateOne(interessenBezeichnung, interesse);
+    @Put(':interessenID')
+    updateOne(@Param('interessenID') interessenID: number, @Body() interesse: Interessen): Observable<any> {
+        return this.interessenService.updateOne(interessenID, interesse);
     }
 /*
     @hasRoles(UserRole.ADMIN)
     @UseGuards(JwtAuthGuard, RolesGuard)
 */
-    @Delete(':interessenBezeichnung')
-    deleteOne(@Param('interessenBezeichnung') interessenBezeichnung: string): Observable<any> {
-        return this.interessenService.deleteOne(interessenBezeichnung);
+    @Delete(':interessenID')
+    deleteOne(@Param('interessenID') interessenID: number): Observable<any> {
+        return this.interessenService.deleteOne(interessenID);
     }
 
     

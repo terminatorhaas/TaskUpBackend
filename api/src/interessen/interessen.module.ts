@@ -1,7 +1,8 @@
-import { Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserModule } from 'src/user/user.module';
 import { UserInteresseModule } from 'src/userInteresse/user-interesse.module';
+import { UserInteresseEntity } from 'src/userInteresse/userInteresse.models/userInteresse.entity';
 import { InteressenController } from './interessen.controller/interessen.controller';
 import { InteressenEntity } from './interessen.models/Interessen.entity';
 import { InteressenService } from './interessen.service/interessen.service';
@@ -9,7 +10,8 @@ import { InteressenService } from './interessen.service/interessen.service';
 @Module({
     imports: [
         TypeOrmModule.forFeature([InteressenEntity]),
-        UserInteresseModule
+        forwardRef(() => UserInteresseModule),
+        forwardRef(() => UserModule),
         ],
     
     controllers: [InteressenController],

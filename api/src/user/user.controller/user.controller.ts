@@ -1,4 +1,4 @@
-import { Controller, Post, Body, Get, Param, Delete, Put, UseGuards } from '@nestjs/common';
+import { Controller, Post, Body, Get, Param, Delete, Put, UseGuards, HttpCode } from '@nestjs/common';
 import { UserService } from '../user.service/user.service';
 import { User, UserRole } from '../user.models/user.interface';
 import { Observable, of } from 'rxjs';
@@ -7,6 +7,7 @@ import { Interessen } from 'src/interessen/interessen.models/interessen.interfac
 import { hasRoles } from 'src/auth/decorators/role.decorator';
 import { JwtAuthGuard } from 'src/auth/guards/jwt.guard';
 import { RolesGuard } from 'src/auth/guards/roles.guard';
+import { Kalender } from 'src/kalender/kalender.models/kalender.interface';
 
 @Controller('users')
 export class UserController {
@@ -53,15 +54,41 @@ export class UserController {
         return this.userService.updateOne(username,user);
     }
 
-    @Put(':username/bindInteresse')
-    addTieToInteresse(@Param('username') username: string, @Body('interessenBezeichnung') interessenBezeichnung?: string): Observable<any> {
-        return this.userService.addTieToInteresse(username, interessenBezeichnung);
+    @Put(':username/Interesse/:interessenID')
+    @HttpCode(204)
+    addTieToInteresse(@Param('username') username: string, @Param('interessenID') interessenID?: number): void {
+        this.userService.addTieToInteresse(username, interessenID);
     }
 
-    @Get(':username/bindInteresse')
+    @Get(':username/Interesse')
     findeInteressenZuUser(@Param('username') username: string): Observable<Interessen[]> {
             return this.userService.findeInteressenZuUser(username);
     }
+
+    @Delete(':username/Interesse/:interessenID')
+    @HttpCode(204)
+    deleteTieFromInteresse(@Param('username') username: string, @Param('interessenID') interessenID?: number): void {
+            this.userService.deleteTieFromInteresse(username, interessenID);
+    }
+
+    @Put(':username/Kalender/:kalenderId')
+    @HttpCode(204)
+    addTieToKalender(@Param('username') username: string, @Param('kalenderId') kalenderId: number): void {
+        this.userService.addTieToKalender(username, kalenderId);
+    }
+
+    @Get(':username/Kalender/')
+    findeKalenderZuUser(@Param('username') username: string): Observable<Kalender[]> {
+        return this.userService.findeKalenderZuUser(username);
+    }
+
+    @Delete(':username/Kalender/:kalenderId')
+    @HttpCode(204)
+    removeTieFromKalender(@Param('username') username: string, @Param('kalenderId') kalenderId: number): void {
+        return this.userService.removeTieFromKalender(username, kalenderId);
+    }
+
+
 
     @hasRoles(UserRole.ADMIN)
     @UseGuards(JwtAuthGuard, RolesGuard)

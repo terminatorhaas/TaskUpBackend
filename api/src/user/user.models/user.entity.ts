@@ -2,6 +2,7 @@ import { BeforeInsert, Column, Entity, Index, ManyToMany, OneToMany } from "type
 import { KalenderEntity } from "../../kalender/kalender.models/kalender.entity";
 import { UserRole } from "./user.interface";
 import { UserInteresseEntity } from "src/userInteresse/userInteresse.models/userInteresse.entity";
+import { UserKalenderEntity } from "src/userKalender/userKalender.models/userKalender.entity";
 
 @Index("email", ["email"], { unique: true })
 @Entity("user", { schema: "taskUPdb" })
@@ -35,8 +36,8 @@ export class UserEntity {
     this.email = this.email.toLowerCase();
   }
 
-  @ManyToMany(type => KalenderEntity, kalender => kalender.users)
-  public kalenders: KalenderEntity[];
+  @OneToMany(type => UserKalenderEntity, kalender => kalender.username)
+  public kalenders: UserKalenderEntity[];
 
   @OneToMany(type => UserInteresseEntity, userInteressen => userInteressen.username)
   public interessens: UserInteresseEntity[];

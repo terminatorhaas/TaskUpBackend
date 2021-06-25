@@ -18,7 +18,7 @@ export class KalenderController {
         return this.kalenderService.create(kalender);
     }
 
-    @Get('kalenderId')
+    @Get(':kalenderId')
     findOne(@Param() params): Observable<Kalender> {
         return this.kalenderService.findOne(params.kalenderId);
     }
@@ -40,13 +40,5 @@ export class KalenderController {
     deleteOne(@Param('kalenderId') kalenderId: number): Observable<any> {
         return this.kalenderService.deleteOne(kalenderId);
     }
-
-
-
-
-
-
-
-
 
 }

@@ -1,4 +1,4 @@
 export interface Kalender{
-    kalenderId: number;
+    kalenderID: number;
     bezeichnung: string | null;
 }

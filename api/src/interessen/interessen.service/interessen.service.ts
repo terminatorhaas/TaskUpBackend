@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { forwardRef, Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { FindRelationsNotFoundError, In, Like, Raw, Repository } from 'typeorm';
 import { InteressenEntity } from '../interessen.models/Interessen.entity';
@@ -8,12 +8,17 @@ import { Interessen } from '../interessen.models/interessen.interface';
 import { UserInteresseService } from 'src/userInteresse/userInteresse.service/user-interesse.service';
 import { User } from 'src/user/user.models/user.interface';
 import { UserInteresse } from 'src/userInteresse/userInteresse.models/userInteresse';
+import { UserService } from 'src/user/user.service/user.service';
 
 @Injectable()
 export class InteressenService {
     constructor(
         @InjectRepository(InteressenEntity) private readonly interessenRepository: Repository<InteressenEntity>,
+        @Inject(forwardRef(() => UserInteresseService))
         readonly userInteresseService: UserInteresseService,
+
+        @Inject(forwardRef(() => UserService))
+        readonly userService: UserService,
     ) { }
 
     create(interesse: Interessen): Observable<Interessen> {
@@ -26,9 +31,9 @@ export class InteressenService {
     }
 
 
-    findOne(interessenBezeichnung: string): Observable<Interessen> {
-        console.log("Suche nach Interesse " + interessenBezeichnung);
-        return from(this.interessenRepository.findOne({ interessenBezeichnung }));
+    findOne(interessenID: number): Observable<Interessen> {
+        console.log("Suche nach Interesse " + interessenID);
+        return from(this.interessenRepository.findOne(interessenID));
     }
 
     findAll(): Observable<Interessen[]> {
@@ -40,29 +45,30 @@ export class InteressenService {
         );
     }
 
-    updateOne(interessenBezeichnung: string, interesse: Interessen): Observable<any> {
-        console.log("Interesse: " + interessenBezeichnung + " geändert.");
-        return this.findOne(interessenBezeichnung).pipe(
+    updateOne(interessenID: number, interesse: Interessen): Observable<any> {
+        console.log("Interesse: " + interessenID + " geändert.");
+        return this.findOne(interessenID).pipe(
             switchMap((oldInteresse: Interessen) => { return this.interessenRepository.update(oldInteresse.interessenId, interesse) }))
     }
 
 
-    deleteOne(interessenBezeichnung: string): Observable<any> {
-        console.log("Interessen: " + interessenBezeichnung + " gelöscht.");
-        return this.findOne(interessenBezeichnung).pipe(
-            switchMap((oldInteresse: Interessen) => { return this.interessenRepository.delete(oldInteresse.interessenId) }))
+    deleteOne(interessenID: number): Observable<any> {
+        console.log("Interessen: " + interessenID + " gelöscht.");
+        this.userInteresseService.deleteAlleInteressenTies(interessenID);
+        return from(this.interessenRepository.delete(interessenID));
     }
 
-    public getInteresse(interessenBezeichnung: string): Observable<Interessen> {
-        console.log("Suche nach Interesse " + interessenBezeichnung);
-        return from(this.interessenRepository.findOne({ interessenBezeichnung }));
+    public getInteresse(interessenID: number): Observable<Interessen> {
+        console.log("Suche nach Interesse " + interessenID);
+        return from(this.interessenRepository.findOne(interessenID));
     }
 
-    public getInteresseZuUser(user: User): Observable<Interessen[]> {
+    public getInteresseZuUser(username: string): Observable<Interessen[]> {
 
         const interessenIds: number[] = [];
 
-        return from(this.userInteresseService.findeInteressenZuUser(user)).pipe(switchMap((interessenIds: number[]) => {
+        return from(this.userInteresseService.findeInteressenZuUser(username)).pipe(switchMap((interessenIds: number[]) => {
+            
             for (var i = 0; i < interessenIds.length; i++) {
                 console.log("interessenService: " + interessenIds[i]);
             };
@@ -70,44 +76,6 @@ export class InteressenService {
                 interessenId: In(interessenIds)
             });
         }));
-    
-            
-
-
-
-        /*
-        
-        pipe(
-            switchMap((interessenIds: number[]) => {
-                for(var i = 0; i < interessenIds.length; i++) {
-                    console.log(interessenIds[i]);
-                };
-                return from(this.interessenRepository.find({
-                    interessenId: In(interessenIds)}));
-            }));
-
-
-
-        for(var i = 0; i < interessenArray.length; i++) {
-            console.log(interessenArray[i]);
-        };
-            return from(this.interessenRepository.find({
-                interessenId: In(interessenArray)}));
-        
-        
-
-        /*
-        return from(this.userInteresseService.findeInteressenZuUser(user).pipe(
-            switchMap((mappedUserInteresse: UserInteresse[]) => {
-                let interessenArray: number[] = [];
-                console.log("Interessen-Array deklariert")
-                for(var i = 0; i < mappedUserInteresse.length; i++) {
-                    interessenArray.push(mappedUserInteresse[i].interesse.interessenId);
-                    console.log("interesse:" + mappedUserInteresse[i].interesse.interessenId);
-                };
-                return this.interessenRepository.find({
-                    interessenId: In(interessenArray)})})));
-                    */
 
     }
 
