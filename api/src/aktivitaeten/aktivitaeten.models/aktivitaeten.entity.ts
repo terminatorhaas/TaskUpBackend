@@ -21,7 +21,7 @@ export class AktivitaetenEntity {
   })
   aktivitaetsSatz: string | null;
 
-  @OneToMany(() => EreignisEntity, (ereignis) => ereignis.aktivitaeten)
+  @OneToMany(() => EreignisEntity, (ereignis) => ereignis.aktivitaetenId)
   ereignis: EreignisEntity[];
 
   @OneToMany(type => InteressenAktivitaetenEntity, interessenAktivitaeten => interessenAktivitaeten.aktivitaetenID) 

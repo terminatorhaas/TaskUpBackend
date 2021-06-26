@@ -4,6 +4,7 @@ import {
   Index,
   JoinColumn,
   ManyToOne,
+  PrimaryColumn,
   PrimaryGeneratedColumn,
 } from "typeorm";
 import { AktivitaetenEntity } from "../../aktivitaeten/aktivitaeten.models/aktivitaeten.entity";
@@ -14,12 +15,24 @@ import {  KalenderEntity } from "../../kalender/kalender.models/kalender.entity"
 @Entity("ereignis", { schema: "taskUPdb" })
 export class EreignisEntity {
   @Column("int", { name: "aktivitaetenID" })
+  @ManyToOne(() => AktivitaetenEntity, (aktivitaeten) => aktivitaeten.ereignis, {
+    onDelete: "RESTRICT",
+    onUpdate: "RESTRICT",
+  })
+  @JoinColumn([
+    { name: "aktivitaetenID", referencedColumnName: "aktivitaetenID" },
+  ])
   aktivitaetenId: number;
 
   @PrimaryGeneratedColumn({ type: "int", name: "ereignisID" })
   ereignisId: number;
 
-  @Column("int", { primary: true, name: "kalenderID" })
+  @PrimaryColumn({ type: "int", name: "kalenderID" })
+  @ManyToOne(() => KalenderEntity, (kalender) => kalender.ereignis, {
+    onDelete: "RESTRICT",
+    onUpdate: "RESTRICT",
+  })
+  @JoinColumn([{ name: "kalenderID", referencedColumnName: "kalenderID" }])
   kalenderId: number;
 
   @Column("varchar", { name: "bezeichnung", nullable: true, length: 150 })
@@ -31,6 +44,7 @@ export class EreignisEntity {
   @Column("datetime", { name: "ende_datum_uhr" })
   endeDatumUhr: Date;
 
+  /*
   @ManyToOne(() => AktivitaetenEntity, (aktivitaeten) => aktivitaeten.ereignis, {
     onDelete: "RESTRICT",
     onUpdate: "RESTRICT",
@@ -38,12 +52,13 @@ export class EreignisEntity {
   @JoinColumn([
     { name: "aktivitaetenID", referencedColumnName: "aktivitaetenID" },
   ])
-  aktivitaeten: AktivitaetenEntity;
+  aktivitaeten: number;
 
   @ManyToOne(() => KalenderEntity, (kalender) => kalender.ereignis, {
     onDelete: "RESTRICT",
     onUpdate: "RESTRICT",
   })
   @JoinColumn([{ name: "kalenderID", referencedColumnName: "kalenderID" }])
-  kalender: KalenderEntity;
+  kalender: number;
+  */
 }
