@@ -12,7 +12,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"aktivitaetsBezeichnung\": \"Carsten\"\r\n}",
+					"raw": "{\r\n    \"aktivitaetsBezeichnung\": \"Kategorie1\",\r\n    \"aktivitaetsSatz\": \"Ich bin ein Satz\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -59,7 +59,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"aktivitaetsBezeichnung\": \"Manuel\"\r\n}",
+					"raw": "{\r\n    \"aktivitaetsBezeichnung\": \"Kategorie2\",\r\n    \"aktivitaetsSatz\": \"TEEEEEEEEEEEEEST\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -67,7 +67,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:3000/aktivitaeten/Carsten",
+					"raw": "http://localhost:3000/aktivitaeten/2",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -75,7 +75,7 @@
 					"port": "3000",
 					"path": [
 						"aktivitaeten",
-						"Carsten"
+						"2"
 					]
 				}
 			},
@@ -99,7 +99,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:3000/aktivitaeten/Manuel",
+					"raw": "http://localhost:3000/aktivitaeten/Kategorie1",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -107,7 +107,7 @@
 					"port": "3000",
 					"path": [
 						"aktivitaeten",
-						"Manuel"
+						"Kategorie1"
 					]
 				}
 			},

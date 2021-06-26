@@ -60,18 +60,23 @@ export class UserController {
         this.userService.addTieToInteresse(username, interessenID);
     }
 
+
     @Get(':username/interessen')
+
     findeInteressenZuUser(@Param('username') username: string): Observable<Interessen[]> {
             return this.userService.findeInteressenZuUser(username);
     }
 
+
     @Delete(':username/interessen/:interessenID')
+
     @HttpCode(204)
     deleteTieFromInteresse(@Param('username') username: string, @Param('interessenID') interessenID?: number): void {
             this.userService.deleteTieFromInteresse(username, interessenID);
     }
 
-    @Put(':username/Kalender/:kalenderID')
+    @Put(':username/kalender/:kalenderID')
+
     @HttpCode(204)
     addTieToKalender(@Param('username') username: string, @Param('kalenderID') kalenderID: number): void {
         this.userService.addTieToKalender(username, kalenderID);
@@ -82,7 +87,7 @@ export class UserController {
         return this.userService.findeKalenderZuUser(username);
     }
 
-    @Delete(':username/Kalender/:kalenderId')
+    @Delete(':username/kalender/:kalenderId')
     @HttpCode(204)
     removeTieFromKalender(@Param('username') username: string, @Param('kalenderId') kalenderId: number): void {
         return this.userService.removeTieFromKalender(username, kalenderId);

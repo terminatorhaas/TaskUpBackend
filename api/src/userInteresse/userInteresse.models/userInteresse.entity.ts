@@ -12,6 +12,6 @@ export class UserInteresseEntity {
 
   @PrimaryColumn("int", {name: "interessenID"})
   @ManyToOne(type => InteressenEntity)
-  @JoinColumn([{name: "interessenID", referencedColumnName: "interessenId" }])
+  @JoinColumn([{name: "interessenID", referencedColumnName: "interessenID" }])
   interessenID: number;
 }

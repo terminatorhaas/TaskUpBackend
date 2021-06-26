@@ -4,7 +4,6 @@ import { InteressenEntity } from 'src/interessen/interessen.models/Interessen.en
 import { InteressenModule } from 'src/interessen/interessen.module';
 import { UserEntity } from 'src/user/user.models/user.entity';
 import { UserModule } from 'src/user/user.module';
-import { UserInteresseController } from './userInteresse.controller/user-interesse.controller';
 import { UserInteresseEntity } from './userInteresse.models/userInteresse.entity';
 import { UserInteresseService } from './userInteresse.service/user-interesse.service';
 
@@ -15,7 +14,6 @@ import { UserInteresseService } from './userInteresse.service/user-interesse.ser
     forwardRef(() => UserModule),
   ],
 
-  controllers: [UserInteresseController],
   providers: [UserInteresseService],
   exports: [UserInteresseService]
 })
