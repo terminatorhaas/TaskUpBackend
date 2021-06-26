@@ -1,18 +1,18 @@
 {
 	"info": {
-		"_postman_id": "bdff6910-9b93-46bf-a400-17d961369f05",
-		"name": "Aktivitäten",
+		"_postman_id": "ea9264bd-5067-49bb-b85e-31395a2f036c",
+		"name": "Ereignis",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
 		{
-			"name": "Aktivität speichern",
+			"name": "Ereignis speichern",
 			"request": {
 				"method": "POST",
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"aktivitaetsBezeichnung\": \"Kategorie1\",\r\n    \"aktivitaetsSatz\": \"Ich bin ein Satz\"\r\n}",
+					"raw": "{\r\n    \"aktivitaetenId\": 1,\r\n    \"kalenderId\": 1,\r\n    \"bezeichnung\": \"Saaas mit den Jungs\",\r\n    \"beginnDatumUhr\": \"2021-06-27T06:00:00.000Z\",\r\n    \"endeDatumUhr\": \"2021-06-27T10:00:00.000Z\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -20,46 +20,59 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:3000/aktivitaeten",
+					"raw": "http://localhost:3000/ereignis",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
 					"port": "3000",
 					"path": [
-						"aktivitaeten"
+						"ereignis"
 					]
 				}
 			},
 			"response": []
 		},
 		{
-			"name": "Alle Aktivitäten lesen",
+			"name": "Ereignisse zu Kalender bekommen",
 			"request": {
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:3000/aktivitaeten",
+					"raw": ""
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Ein Ereignis finden",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/ereignis/1/1",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
 					"port": "3000",
 					"path": [
-						"aktivitaeten"
+						"ereignis",
+						"1",
+						"1"
 					]
 				}
 			},
 			"response": []
 		},
 		{
-			"name": "Aktivität ändern",
+			"name": "Ereignis ändern",
 			"request": {
 				"method": "PUT",
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"aktivitaetsBezeichnung\": \"Kategorie2\",\r\n    \"aktivitaetsSatz\": \"TEEEEEEEEEEEEEST\"\r\n}",
+					"raw": "{\r\n    \"aktivitaetenId\": 1,\r\n    \"kalenderId\": 2,\r\n    \"bezeichnung\": \"Foooof mit den Jungs\",\r\n    \"beginnDatumUhr\": \"2021-06-27T06:00:00.000Z\",\r\n    \"endeDatumUhr\": \"2021-06-27T10:00:00.000Z\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -67,67 +80,37 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:3000/aktivitaeten/2",
+					"raw": "http://localhost:3000/ereignis/1/1",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
 					"port": "3000",
 					"path": [
-						"aktivitaeten",
-						"2"
+						"ereignis",
+						"1",
+						"1"
 					]
 				}
 			},
 			"response": []
 		},
 		{
-			"name": "Eine Aktivität lesen",
-			"protocolProfileBehavior": {
-				"disableBodyPruning": true
-			},
-			"request": {
-				"method": "GET",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "http://localhost:3000/aktivitaeten/Kategorie1",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "3000",
-					"path": [
-						"aktivitaeten",
-						"Kategorie1"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Aktivität löschen",
+			"name": "Ereignis löschen",
 			"request": {
 				"method": "DELETE",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:3000/aktivitaeten/Manuel",
+					"raw": "http://localhost:3000/ereignis/1/1",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
 					"port": "3000",
 					"path": [
-						"aktivitaeten",
-						"Manuel"
+						"ereignis",
+						"1",
+						"1"
 					]
 				}
 			},
