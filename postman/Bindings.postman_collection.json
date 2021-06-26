@@ -161,6 +161,96 @@
 					"response": []
 				}
 			]
+		},
+		{
+			"name": "Interessen <-> Aktivitäten",
+			"item": [
+				{
+					"name": "Interessen zu Aktivität finden",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/aktivitaeten/3/Interessen",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"aktivitaeten",
+								"3",
+								"Interessen"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Aktivitäten zu Interesse finden",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/interessen/3/Aktivitaeten",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"interessen",
+								"3",
+								"Aktivitaeten"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Interessen Aktivitäten Tie löschen",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/interessen/3/Aktivitaeten",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"interessen",
+								"3",
+								"Aktivitaeten"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Interesse an Aktivität binden",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/interessen/3/Aktivitaeten/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"interessen",
+								"3",
+								"Aktivitaeten",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
 		}
 	]
 }
