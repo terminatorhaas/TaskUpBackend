@@ -54,30 +54,30 @@ export class UserController {
         return this.userService.updateOne(username,user);
     }
 
-    @Put(':username/Interesse/:interessenID')
+    @Put(':username/interesse/:interessenID')
     @HttpCode(204)
     addTieToInteresse(@Param('username') username: string, @Param('interessenID') interessenID?: number): void {
         this.userService.addTieToInteresse(username, interessenID);
     }
 
-    @Get(':username/Interesse')
+    @Get(':username/interessen')
     findeInteressenZuUser(@Param('username') username: string): Observable<Interessen[]> {
             return this.userService.findeInteressenZuUser(username);
     }
 
-    @Delete(':username/Interesse/:interessenID')
+    @Delete(':username/interessen/:interessenID')
     @HttpCode(204)
     deleteTieFromInteresse(@Param('username') username: string, @Param('interessenID') interessenID?: number): void {
             this.userService.deleteTieFromInteresse(username, interessenID);
     }
 
-    @Put(':username/Kalender/:kalenderId')
+    @Put(':username/Kalender/:kalenderID')
     @HttpCode(204)
-    addTieToKalender(@Param('username') username: string, @Param('kalenderId') kalenderId: number): void {
-        this.userService.addTieToKalender(username, kalenderId);
+    addTieToKalender(@Param('username') username: string, @Param('kalenderID') kalenderID: number): void {
+        this.userService.addTieToKalender(username, kalenderID);
     }
 
-    @Get(':username/Kalender/')
+    @Get(':username/kalender/')
     findeKalenderZuUser(@Param('username') username: string): Observable<Kalender[]> {
         return this.userService.findeKalenderZuUser(username);
     }
@@ -92,8 +92,8 @@ export class UserController {
 
     @hasRoles(UserRole.ADMIN)
     @UseGuards(JwtAuthGuard, RolesGuard)
-    @Put('username/role')
-    updateRole(@Body ('username') username: string, @Body('role') role: string): Observable<any>{   
+    @Put(':username/:role')
+    updateRole( @Param('username') username: string, @Param('role') role: string): Observable<any>{   
      
         return this.userService.updateRoleOfUser(username,role);
     }

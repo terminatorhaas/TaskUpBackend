@@ -1,9 +1,11 @@
 import { Body, Controller, Delete, Get, Param, Post, Put, UseGuards } from '@nestjs/common';
+import { userInfo } from 'os';
 import { Observable } from 'rxjs';
 import { hasRoles } from 'src/auth/decorators/role.decorator';
 import { JwtAuthGuard } from 'src/auth/guards/jwt.guard';
 import { RolesGuard } from 'src/auth/guards/roles.guard';
-import { UserRole } from 'src/user/user.models/user.interface';
+import { InteressenEntity } from 'src/interessen/interessen.models/Interessen.entity';
+import { User, UserRole } from 'src/user/user.models/user.interface';
 import { Aktivitaeten } from '../aktivitaeten.models/aktivitaeten.interface';
 import { AktivitaetenService } from '../aktivitaeten.service/aktivitaeten.service';
 
@@ -20,9 +22,9 @@ export class AktivitaetenController {
         return this.aktivitaetenService.create(aktivitaet);
     }
 
-    @Get(':aktivitaetsBezeichnung')
-    findOne(@Param() params): Observable<Aktivitaeten> {
-        return this.aktivitaetenService.findOne(params.aktivitaetsBezeichnung);
+    @Get(':aktivitaetenID')
+    findOne(@Param('aktivitaetenID') aktivitaetenID: number): Observable<Aktivitaeten> {
+        return this.aktivitaetenService.findOne(aktivitaetenID);
     }
 
     @Get()
@@ -33,17 +35,21 @@ export class AktivitaetenController {
     @hasRoles(UserRole.ADMIN)
     @UseGuards(JwtAuthGuard, RolesGuard)
 */
-    @Put(':aktivitaetsBezeichnung')
-    updateOne(@Param('aktivitaetsBezeichnung') aktivitaetsBezeichnung: string, @Body() aktivitaet: Aktivitaeten): Observable<any> {
-        return this.aktivitaetenService.updateOne(aktivitaetsBezeichnung, aktivitaet);
+    @Put(':aktivitaetenID')
+    updateOne(@Param('aktivitaetenID') aktivitaetenID: number, @Body() aktivitaet: Aktivitaeten): Observable<any> {
+        return this.aktivitaetenService.updateOne(aktivitaetenID, aktivitaet);
     }
 /*    
     @hasRoles(UserRole.ADMIN)
     @UseGuards(JwtAuthGuard, RolesGuard)
 */  
-    @Delete(':aktivitaetsBezeichnung')
-    deleteOne(@Param('aktivitaetsBezeichnung') aktivitaetsBezeichnung: string): Observable<any> {
-        return this.aktivitaetenService.deleteOne(aktivitaetsBezeichnung);
+    @Delete(':aktivitaetenID')
+    deleteOne(@Param('aktivitaetenID') aktivitaetenID: number): Observable<any> {
+        return this.aktivitaetenService.deleteOne(aktivitaetenID);
     }
 
+    @Get('vorschlaege/:username')
+    generateVorschlaege(@Body() user: User):Observable<InteressenEntity[]>{
+        return ;
+    }
 }
