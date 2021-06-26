@@ -1,8 +1,11 @@
-import { Injectable } from '@nestjs/common';
+import { forwardRef, Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { from, Observable } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
-import { Repository } from 'typeorm';
+import { Interessen } from 'src/interessen/interessen.models/interessen.interface';
+import { InteressenService } from 'src/interessen/interessen.service/interessen.service';
+import { InteressenAktivitaetenService } from 'src/interessenAktivitaeten/interessenAktivitaeten.service/interessenAktivitaeten.service';
+import { In, Repository } from 'typeorm';
 import { AktivitaetenEntity } from '../aktivitaeten.models/aktivitaeten.entity';
 import { Aktivitaeten } from '../aktivitaeten.models/aktivitaeten.interface';
 
@@ -11,6 +14,13 @@ export class AktivitaetenService {
 
     constructor(
         @InjectRepository(AktivitaetenEntity) private readonly aktivitaetenRepository: Repository<AktivitaetenEntity>,
+
+        @Inject(forwardRef(() => InteressenService))
+        private readonly interessenService: InteressenService,
+
+        @Inject(forwardRef(() => InteressenAktivitaetenService))
+        private readonly interessenAktivitaetenService: InteressenAktivitaetenService,
+
     ) {}
 
     create(aktivitaet: Aktivitaeten): Observable<Aktivitaeten> {
@@ -19,33 +29,49 @@ export class AktivitaetenService {
 }
 
 
-findOne(aktivitaetsBezeichnung: string): Observable<Aktivitaeten> {
-console.log("Suche nach Aktivität " + aktivitaetsBezeichnung);
-return from(this.aktivitaetenRepository.findOne({aktivitaetsBezeichnung}));
+findOne(aktivitaetenID: number): Observable<Aktivitaeten> {
+console.log("Suche nach Aktivität " + aktivitaetenID);
+return from(this.aktivitaetenRepository.findOne(aktivitaetenID));
 }
 
 findAll(): Observable<Aktivitaeten[]> {
 return from(this.aktivitaetenRepository.find()).pipe(
-    map((interessen: Aktivitaeten[]) => {
+    map((aktivitaeten: Aktivitaeten[]) => {
         console.log("Alle Aktivitäten gefunden");
-        return interessen;
+        return aktivitaeten;
     })
 );
 }
 
-updateOne(aktivitaetsBezeichnung: string, aktivitaet: Aktivitaeten): Observable<any> {
-console.log("Interesse: " + aktivitaetsBezeichnung + " geändert.");
-return this.findOne(aktivitaetsBezeichnung).pipe(
-    switchMap((oldAktivitaet: Aktivitaeten) => {return this.aktivitaetenRepository.update(oldAktivitaet.aktivitaetenId, aktivitaet)}))
+updateOne(aktivitaetenID: number, aktivitaet: Aktivitaeten): Observable<any> {
+console.log("Interesse: " + aktivitaetenID + " geändert.");
+return from(this.aktivitaetenRepository.update(aktivitaetenID, aktivitaet));
 }
 
 
-deleteOne(aktivitaetsBezeichnung: string): Observable<any> {
-console.log("Interessen: " + aktivitaetsBezeichnung + " gelöscht.");
-return this.findOne(aktivitaetsBezeichnung).pipe(
-    switchMap((oldAktivitaet: Aktivitaeten) => {return this.aktivitaetenRepository.delete(oldAktivitaet.aktivitaetenId)}))
+deleteOne(aktivitaetenID: number): Observable<any> {
+console.log("Interessen: " + aktivitaetenID + " gelöscht.");
+    this.interessenAktivitaetenService.deleteAlleAktivitaetenTies(aktivitaetenID);
+    return from(this.aktivitaetenRepository.delete(aktivitaetenID));
 }
 
+public findeInteressenZuAktivitaet(aktivitaetenId: number): Observable<Interessen[]> {
+    const interessenIds: number[] = [];
+    return from(this.interessenService.findeInteressenZuAktivitaet(aktivitaetenId));
+}
+
+public findeAktivitaetZuInteresse(interessenId: number): Observable<Aktivitaeten[]> {
+
+
+    return from(this.interessenAktivitaetenService.findAktivitaetenZuInteresse(interessenId)).pipe(switchMap((aktivitaetenIds: number[]) => {
+        for (var i = 0; i < aktivitaetenIds.length; i++) {
+            console.log("aktivitaetenService: " + aktivitaetenIds[i]);
+        };
+        return this.aktivitaetenRepository.find({
+            aktivitaetenID: In(aktivitaetenIds)
+        });
+    }));
+}
 
 
 

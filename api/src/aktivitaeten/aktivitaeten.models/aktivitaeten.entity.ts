@@ -1,3 +1,4 @@
+import { InteressenAktivitaetenEntity } from "src/interessenAktivitaeten/interessenAktivitaeten.models/interessenAktivitaeten.entity";
 import { Column, Entity, JoinTable, ManyToMany, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { EreignisEntity } from "../../ereignis/ereignis.models/ereignis.entity";
 import { InteressenEntity } from "../../interessen/interessen.models/Interessen.entity";
@@ -5,7 +6,7 @@ import { InteressenEntity } from "../../interessen/interessen.models/Interessen.
 @Entity("aktivitaeten", { schema: "taskUPdb" })
 export class AktivitaetenEntity {
   @PrimaryGeneratedColumn( "increment", {name: "aktivitaetenID" })
-  aktivitaetenId: number;
+  aktivitaetenID: number;
 
   @Column("varchar", {
     name: "aktivitaets_bezeichnung",
@@ -23,16 +24,6 @@ export class AktivitaetenEntity {
   @OneToMany(() => EreignisEntity, (ereignis) => ereignis.aktivitaeten)
   ereignis: EreignisEntity[];
 
-  @ManyToMany(() => InteressenEntity, (interessen) => interessen.aktivitaetens)
-  @JoinTable({
-    name: "aktivitaeten_interesse_kategorien",
-    joinColumns: [
-      { name: "aktivitaetenID", referencedColumnName: "aktivitaetenId" },
-    ],
-    inverseJoinColumns: [
-      { name: "interessenID", referencedColumnName: "interessenId" },
-    ],
-    schema: "taskUPdb",
-  })
-  interessens: InteressenEntity[];
+  @OneToMany(type => InteressenAktivitaetenEntity, interessenAktivitaeten => interessenAktivitaeten.aktivitaetenID) 
+  public interessens: InteressenAktivitaetenEntity[];
 }

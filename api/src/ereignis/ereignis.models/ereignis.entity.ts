@@ -36,7 +36,7 @@ export class EreignisEntity {
     onUpdate: "RESTRICT",
   })
   @JoinColumn([
-    { name: "aktivitaetenID", referencedColumnName: "aktivitaetenId" },
+    { name: "aktivitaetenID", referencedColumnName: "aktivitaetenID" },
   ])
   aktivitaeten: AktivitaetenEntity;
 

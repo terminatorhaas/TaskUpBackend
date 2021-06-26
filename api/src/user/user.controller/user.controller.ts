@@ -54,35 +54,35 @@ export class UserController {
         return this.userService.updateOne(username,user);
     }
 
-    @Put(':username/Interesse/:interessenID')
+    @Put(':username/interesse/:interessenID')
     @HttpCode(204)
     addTieToInteresse(@Param('username') username: string, @Param('interessenID') interessenID?: number): void {
         this.userService.addTieToInteresse(username, interessenID);
     }
 
-    @Get(':username/Interesse')
+    @Get(':username/interesse')
     findeInteressenZuUser(@Param('username') username: string): Observable<Interessen[]> {
             return this.userService.findeInteressenZuUser(username);
     }
 
-    @Delete(':username/Interesse/:interessenID')
+    @Delete(':username/interesse/:interessenID')
     @HttpCode(204)
     deleteTieFromInteresse(@Param('username') username: string, @Param('interessenID') interessenID?: number): void {
             this.userService.deleteTieFromInteresse(username, interessenID);
     }
 
-    @Put(':username/Kalender/:kalenderId')
+    @Put(':username/kalender/:kalenderId')
     @HttpCode(204)
     addTieToKalender(@Param('username') username: string, @Param('kalenderId') kalenderId: number): void {
         this.userService.addTieToKalender(username, kalenderId);
     }
 
-    @Get(':username/Kalender/')
+    @Get(':username/kalender/')
     findeKalenderZuUser(@Param('username') username: string): Observable<Kalender[]> {
         return this.userService.findeKalenderZuUser(username);
     }
 
-    @Delete(':username/Kalender/:kalenderId')
+    @Delete(':username/kalender/:kalenderId')
     @HttpCode(204)
     removeTieFromKalender(@Param('username') username: string, @Param('kalenderId') kalenderId: number): void {
         return this.userService.removeTieFromKalender(username, kalenderId);

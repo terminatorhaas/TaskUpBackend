@@ -1,5 +1,7 @@
 import { forwardRef, Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { AktivitaetenModule } from 'src/aktivitaeten/aktivitaeten.module';
+import { InteressenAktivitaetenModule } from 'src/interessenAktivitaeten/interessenAktivitaeten.module';
 import { UserModule } from 'src/user/user.module';
 import { UserInteresseModule } from 'src/userInteresse/user-interesse.module';
 import { UserInteresseEntity } from 'src/userInteresse/userInteresse.models/userInteresse.entity';
@@ -12,6 +14,8 @@ import { InteressenService } from './interessen.service/interessen.service';
         TypeOrmModule.forFeature([InteressenEntity]),
         forwardRef(() => UserInteresseModule),
         forwardRef(() => UserModule),
+        forwardRef(() => InteressenAktivitaetenModule),
+        forwardRef(() => AktivitaetenModule),
         ],
     
     controllers: [InteressenController],
