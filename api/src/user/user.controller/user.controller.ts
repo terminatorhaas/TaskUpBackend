@@ -60,21 +60,26 @@ export class UserController {
         this.userService.addTieToInteresse(username, interessenID);
     }
 
-    @Get(':username/interesse')
+
+    @Get(':username/interessen')
+
     findeInteressenZuUser(@Param('username') username: string): Observable<Interessen[]> {
             return this.userService.findeInteressenZuUser(username);
     }
 
-    @Delete(':username/interesse/:interessenID')
+
+    @Delete(':username/interessen/:interessenID')
+
     @HttpCode(204)
     deleteTieFromInteresse(@Param('username') username: string, @Param('interessenID') interessenID?: number): void {
             this.userService.deleteTieFromInteresse(username, interessenID);
     }
 
-    @Put(':username/kalender/:kalenderId')
+    @Put(':username/kalender/:kalenderID')
+
     @HttpCode(204)
-    addTieToKalender(@Param('username') username: string, @Param('kalenderId') kalenderId: number): void {
-        this.userService.addTieToKalender(username, kalenderId);
+    addTieToKalender(@Param('username') username: string, @Param('kalenderID') kalenderID: number): void {
+        this.userService.addTieToKalender(username, kalenderID);
     }
 
     @Get(':username/kalender/')
@@ -92,8 +97,8 @@ export class UserController {
 
     @hasRoles(UserRole.ADMIN)
     @UseGuards(JwtAuthGuard, RolesGuard)
-    @Put('username/role')
-    updateRole(@Body ('username') username: string, @Body('role') role: string): Observable<any>{   
+    @Put(':username/:role')
+    updateRole( @Param('username') username: string, @Param('role') role: string): Observable<any>{   
      
         return this.userService.updateRoleOfUser(username,role);
     }

@@ -15,6 +15,7 @@ export class AktivitaetenService {
     constructor(
         @InjectRepository(AktivitaetenEntity) private readonly aktivitaetenRepository: Repository<AktivitaetenEntity>,
 
+
         @Inject(forwardRef(() => InteressenService))
         private readonly interessenService: InteressenService,
 
@@ -23,10 +24,13 @@ export class AktivitaetenService {
 
     ) {}
 
+
     create(aktivitaet: Aktivitaeten): Observable<Aktivitaeten> {
-        console.log('aktivitaetsBezeichnung  = ' + aktivitaet.aktivitaetsBezeichnung) ;        
+        console.log('aktivitaetsBezeichnung  = ' + aktivitaet.aktivitaetsBezeichnung);
         return from(this.aktivitaetenRepository.save(aktivitaet));
-}
+    } 
+
+    
 
 
 findOne(aktivitaetenID: number): Observable<Aktivitaeten> {
@@ -59,6 +63,7 @@ public findeInteressenZuAktivitaet(aktivitaetenId: number): Observable<Interesse
     const interessenIds: number[] = [];
     return from(this.interessenService.findeInteressenZuAktivitaet(aktivitaetenId));
 }
+
 
 public findeAktivitaetZuInteresse(interessenId: number): Observable<Aktivitaeten[]> {
 
