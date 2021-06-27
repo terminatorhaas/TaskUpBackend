@@ -1,9 +1,6 @@
 import { Body, Controller, Delete, Get, Param, Post, Put, UseGuards } from '@nestjs/common';
 import { userInfo } from 'os';
 import { Observable } from 'rxjs';
-import { hasRoles } from 'src/auth/decorators/role.decorator';
-import { JwtAuthGuard } from 'src/auth/guards/jwt.guard';
-import { RolesGuard } from 'src/auth/guards/roles.guard';
 import { InteressenEntity } from 'src/interessen/interessen.models/Interessen.entity';
 import { User, UserRole } from 'src/user/user.models/user.interface';
 import { Aktivitaeten } from '../aktivitaeten.models/aktivitaeten.interface';

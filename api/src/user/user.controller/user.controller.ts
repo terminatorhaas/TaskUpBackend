@@ -7,7 +7,9 @@ import { Interessen } from 'src/interessen/interessen.models/interessen.interfac
 import { hasRoles } from 'src/auth/decorators/role.decorator';
 import { JwtAuthGuard } from 'src/auth/guards/jwt.guard';
 import { RolesGuard } from 'src/auth/guards/roles.guard';
+import { UserCheckGuard } from 'src/auth/guards/UserCheck.guard';
 import { Kalender } from 'src/kalender/kalender.models/kalender.interface';
+
 
 @Controller('users')
 export class UserController {
@@ -16,10 +18,14 @@ export class UserController {
 
     @Post()
     create(@Body() user: User): Observable<User | Object> {
-        return this.userService.create(user).pipe(
-            map((user: User) => user),
-            catchError(err => of({error: err.message}))
-        );
+        
+            console.log("ich bin noch da")
+            return this.userService.create(user).pipe(
+                map((user: User) => user),
+                catchError(err => of({error: err.message}))
+            );
+        
+
     }
 
     @Post('login')
@@ -32,6 +38,7 @@ export class UserController {
         )
     }
 
+    @UseGuards(JwtAuthGuard, UserCheckGuard)
     @Get(':username')
     findOne(@Param() params): Observable<User> {
         return this.userService.findOne(params.username);
@@ -49,11 +56,13 @@ export class UserController {
         return this.userService.deleteOne(username);
     }
 
+    @UseGuards(JwtAuthGuard, UserCheckGuard)
     @Put(':username')
     updateOne(@Param('username') username: string, @Body() user: User): Observable<any> {
         return this.userService.updateOne(username,user);
     }
 
+    @UseGuards(JwtAuthGuard, UserCheckGuard)
     @Put(':username/interesse/:interessenID')
     @HttpCode(204)
     addTieToInteresse(@Param('username') username: string, @Param('interessenID') interessenID?: number): void {
