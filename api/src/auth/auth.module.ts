@@ -15,7 +15,7 @@ import { RolesGuard } from './guards/roles.guard';
             inject: [ConfigService],
             useFactory: async (configService: ConfigService) => ({
                 secret: configService.get('JWT_SECRET'),
-                signOptions: {expiresIn: '666s'} /* HIER MUSS DIE GÜLITIKEIT DES TOKENS NOCH ANGEPASST WERDEN Zwei Jahre sind zu viel*/
+                signOptions: {expiresIn: '66666666s'} /* HIER MUSS DIE GÜLITIKEIT DES TOKENS NOCH ANGEPASST WERDEN Zwei Jahre sind zu viel*/
             })
         })
     ],
