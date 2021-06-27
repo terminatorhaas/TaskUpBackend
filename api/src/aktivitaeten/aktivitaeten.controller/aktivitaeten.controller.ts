@@ -56,7 +56,7 @@ export class AktivitaetenController {
     @Get(':aktivitaetenId/interessen/')
     findeInteressenZuAktivitaet(@Param('aktivitaetenId') aktivitaetenId: number): Observable<Interessen[]> {
         return this.aktivitaetenService.findeInteressenZuAktivitaet(aktivitaetenId);
-
+    }
 
     @Get('vorschlaege/:username')
     generateVorschlaege(@Body() user: User):Observable<InteressenEntity[]>{
