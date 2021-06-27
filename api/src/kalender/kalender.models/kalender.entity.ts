@@ -13,6 +13,6 @@ export class KalenderEntity {
   @OneToMany(type => UserKalenderEntity, userKalender => userKalender.kalenderID)
   userKalenders: UserKalenderEntity[];
 
-  @OneToMany(() => EreignisEntity, (ereignis) => ereignis.kalender)
+  @OneToMany(() => EreignisEntity, (ereignis) => ereignis.kalenderId)
   ereignis: EreignisEntity[];
 }

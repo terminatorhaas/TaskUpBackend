@@ -12,7 +12,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"username\": \"Jeff420\",\r\n    \"email\": \"Jefferey444@gmail.com\",\r\n    \"passwort\": \"MateIsNice2\",\r\n    \"vorname\": \"Jefferey\",\r\n    \"nachname\": \"Geoff\",\r\n    \"zeitzone\": \"BFT\",\r\n    \"adminFlag\": 0\r\n}",
+					"raw": "{\r\n    \"username\": \"Jeff424\",\r\n    \"email\": \"Jefferey666@gmail.com\",\r\n    \"passwort\": \"PoggersOMG\",\r\n    \"vorname\": \"Olaf\",\r\n    \"nachname\": \"Werner\",\r\n    \"zeitzone\": \"DHL\",\r\n    \"role\": \"admin\",\r\n    \"adminFlag\": 1\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -100,7 +100,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "    {\r\n        \"username\": \"Jeff420\",\r\n        \"email\": \"jefferey444@gmail.com\",\r\n        \"vorname\": \"Jefferey\",\r\n        \"nachname\": \"Geoff\",\r\n        \"zeitzone\": \"BFT\",\r\n        \"adminFlag\": 0\r\n    }",
+					"raw": "    {\r\n        \"username\": \"Jeff420\",\r\n        \"email\": \"jefferey447@gmail.com\",\r\n        \"vorname\": \"Jefferey\",\r\n        \"nachname\": \"Geoff\",\r\n        \"zeitzone\": \"BFT\",\r\n        \"adminFlag\": 0\r\n    }",
 					"options": {
 						"raw": {
 							"language": "json"

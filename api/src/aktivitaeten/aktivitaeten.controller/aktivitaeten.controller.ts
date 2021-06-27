@@ -3,6 +3,13 @@ import { userInfo } from 'os';
 import { Observable } from 'rxjs';
 import { InteressenEntity } from 'src/interessen/interessen.models/Interessen.entity';
 import { User, UserRole } from 'src/user/user.models/user.interface';
+
+import { hasRoles } from 'src/auth/decorators/role.decorator';
+import { JwtAuthGuard } from 'src/auth/guards/jwt.guard';
+import { RolesGuard } from 'src/auth/guards/roles.guard';
+
+import { Interessen } from 'src/interessen/interessen.models/interessen.interface';
+import { UserRole } from 'src/user/user.models/user.interface';
 import { Aktivitaeten } from '../aktivitaeten.models/aktivitaeten.interface';
 import { AktivitaetenService } from '../aktivitaeten.service/aktivitaeten.service';
 
@@ -20,8 +27,10 @@ export class AktivitaetenController {
     }
 
     @Get(':aktivitaetenID')
+
     findOne(@Param('aktivitaetenID') aktivitaetenID: number): Observable<Aktivitaeten> {
         return this.aktivitaetenService.findOne(aktivitaetenID);
+
     }
 
     @Get()
@@ -43,6 +52,12 @@ export class AktivitaetenController {
     @Delete(':aktivitaetenID')
     deleteOne(@Param('aktivitaetenID') aktivitaetenID: number): Observable<any> {
         return this.aktivitaetenService.deleteOne(aktivitaetenID);
+
+    }
+
+    @Get(':aktivitaetenId/interessen/')
+    findeInteressenZuAktivitaet(@Param('aktivitaetenId') aktivitaetenId: number): Observable<Interessen[]> {
+        return this.aktivitaetenService.findeInteressenZuAktivitaet(aktivitaetenId);
     }
 
     @Get('vorschlaege/:username')

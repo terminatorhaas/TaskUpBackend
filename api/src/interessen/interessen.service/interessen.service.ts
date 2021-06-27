@@ -9,6 +9,9 @@ import { UserInteresseService } from 'src/userInteresse/userInteresse.service/us
 import { User } from 'src/user/user.models/user.interface';
 import { UserInteresse } from 'src/userInteresse/userInteresse.models/userInteresse';
 import { UserService } from 'src/user/user.service/user.service';
+import { InteressenAktivitaetenService } from 'src/interessenAktivitaeten/interessenAktivitaeten.service/interessenAktivitaeten.service';
+import { AktivitaetenService } from 'src/aktivitaeten/aktivitaeten.service/aktivitaeten.service';
+import { Aktivitaeten } from 'src/aktivitaeten/aktivitaeten.models/aktivitaeten.interface';
 
 @Injectable()
 export class InteressenService {
@@ -19,12 +22,21 @@ export class InteressenService {
 
         @Inject(forwardRef(() => UserService))
         readonly userService: UserService,
+
+        @Inject(forwardRef(() => InteressenAktivitaetenService))
+        private readonly interessenAktivitaetenService: InteressenAktivitaetenService,
+
+        @Inject(forwardRef(() => AktivitaetenService))
+        private readonly aktivitaetenService: AktivitaetenService,
+
+
+
     ) { }
 
     create(interesse: Interessen): Observable<Interessen> {
         console.log('interessenBezeichnung  = ' + interesse.interessenBezeichnung);
         const neuesInteresse = new InteressenEntity();
-        console.log('interessenID  = ' + interesse.interessenId);
+        console.log('interessenID  = ' + interesse.interessenID);
         neuesInteresse.interessenBezeichnung = interesse.interessenBezeichnung;
 
         return from(this.interessenRepository.save(neuesInteresse));
@@ -48,13 +60,14 @@ export class InteressenService {
     updateOne(interessenID: number, interesse: Interessen): Observable<any> {
         console.log("Interesse: " + interessenID + " geändert.");
         return this.findOne(interessenID).pipe(
-            switchMap((oldInteresse: Interessen) => { return this.interessenRepository.update(oldInteresse.interessenId, interesse) }))
+            switchMap((oldInteresse: Interessen) => { return this.interessenRepository.update(oldInteresse.interessenID, interesse) }))
     }
 
 
     deleteOne(interessenID: number): Observable<any> {
         console.log("Interessen: " + interessenID + " gelöscht.");
         this.userInteresseService.deleteAlleInteressenTies(interessenID);
+        this.interessenAktivitaetenService.deleteAlleInteressenTies(interessenID);
         return from(this.interessenRepository.delete(interessenID));
     }
 
@@ -73,11 +86,41 @@ export class InteressenService {
                 console.log("interessenService: " + interessenIds[i]);
             };
             return this.interessenRepository.find({
-                interessenId: In(interessenIds)
+                interessenID: In(interessenIds)
             });
         }));
 
     }
+
+
+    public findeInteressenZuAktivitaet(aktivitaetenId: number): Observable<Interessen[]> {
+
+        const interessenIds: number[] = [];
+    
+        return from(this.interessenAktivitaetenService.findeInteressenZuAktivitaet(aktivitaetenId)).pipe(switchMap((interessenIds: number[]) => {
+            
+            for (var i = 0; i < interessenIds.length; i++) {
+                console.log("interessenService: " + interessenIds[i]);
+            };
+            return this.interessenRepository.find({
+                interessenID: In(interessenIds)
+            });
+        }));
+    }
+
+    public findeAktivitaetZuInteresse(interessenId: number): Observable<Aktivitaeten[]> {
+        return from(this.aktivitaetenService.findeAktivitaetZuInteresse(interessenId));
+    }
+
+    public removeInteressenAktivitaetenTie(interessenId: number, aktivitaetenId: number) {
+         return this.interessenAktivitaetenService.deleteAktivitaetenInteresseTie(interessenId, aktivitaetenId);
+    }
+
+    addTieToAktivitaet(interessenId: number, aktivitaetenId: number): void {
+        this.interessenAktivitaetenService.insertNewAktivitaetenInteresseTie(interessenId, aktivitaetenId);
+            }
+
+
 
 }
 

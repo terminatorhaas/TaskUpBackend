@@ -14,7 +14,9 @@ import { UserInteresseService } from './userInteresse.service/user-interesse.ser
     forwardRef(() => UserModule),
   ],
 
+
   controllers: [],
+
   providers: [UserInteresseService],
   exports: [UserInteresseService]
 })

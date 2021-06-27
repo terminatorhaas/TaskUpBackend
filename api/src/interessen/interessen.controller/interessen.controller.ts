@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Post, Put, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpCode, Param, Post, Put, UseGuards } from '@nestjs/common';
 import { Interessen } from '../interessen.models/interessen.interface';
 import { InteressenService } from '../interessen.service/interessen.service';
 import { Observable, of ,from, throwError } from 'rxjs';
@@ -6,6 +6,7 @@ import { hasRoles } from 'src/auth/decorators/role.decorator';
 import { UserRole } from 'src/user/user.models/user.interface';
 import { JwtAuthGuard } from 'src/auth/guards/jwt.guard';
 import { RolesGuard } from 'src/auth/guards/roles.guard';
+import { Aktivitaeten } from 'src/aktivitaeten/aktivitaeten.models/aktivitaeten.interface';
 
 @Controller('interessen')
 export class InteressenController {
@@ -45,6 +46,29 @@ export class InteressenController {
     deleteOne(@Param('interessenID') interessenID: number): Observable<any> {
         return this.interessenService.deleteOne(interessenID);
     }
+
+
+    @Put(':interessenId/aktivitaeten/:aktivitaetenId')
+    @HttpCode(204)
+    addTieToAktivitaet(@Param('interessenId') interessenId: number, @Param('aktivitaetenId') aktivitaetenId: number): void {
+        this.interessenService.addTieToAktivitaet(interessenId, aktivitaetenId);
+    }
+
+
+    @Get(':interessenID/aktivitaeten/')
+    findeInteressenZuAktivitaet(@Param('interessenID') interessenID: number): Observable<Aktivitaeten[]> {
+        return this.interessenService.findeAktivitaetZuInteresse(interessenID);
+    }
+
+    @Delete(':interessenID/aktivitaeten/:aktivitaetenID')
+    @HttpCode(204)
+    removeInteressenAktivitaetenTie(@Param('interessenID') interessenID: number, @Param('aktivitaetenID') aktivitaetenID: number) {
+        return this.interessenService.removeInteressenAktivitaetenTie(interessenID, aktivitaetenID);
+    }
+
+
+
+
 
     
 }
