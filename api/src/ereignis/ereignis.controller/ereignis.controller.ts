@@ -19,6 +19,11 @@ export class EreignisController {
         );
     }
 
+    @Get('kalender/:kalenderID')
+    findEreignisseZuKalender(@Param('kalenderID') kalenderID: number): Observable<Ereignis[]> {
+        return from(this.ereignisService.findEreignisseZuKalender(kalenderID));
+    }
+
     @Get(':ereignisID/:kalenderID')
     findOne(@Param('ereignisID') ereignisID: number, @Param('kalenderID') kalenderID: number): Observable<Ereignis> {
         return from(this.ereignisService.findOne(ereignisID, kalenderID));
@@ -33,11 +38,6 @@ export class EreignisController {
     @HttpCode(204)
     deleteOne(@Param('ereignisID') ereignisID: number, @Param('kalenderID') kalenderID: number): Observable<any> {
         return this.ereignisService.deleteOne(ereignisID, kalenderID);
-    }
-
-    @Get('kalender/:kalenderID')
-    findEreignisseZuKalender(@Param('kalenderID') kalenderID: number): Observable<Ereignis[]> {
-        return from(this.ereignisService.findEreignisseZuKalender(kalenderID));
     }
 
 
