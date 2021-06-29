@@ -1,20 +1,24 @@
-import { Controller, Post, Body, Get, Param, Delete, Put, UseGuards, HttpCode } from '@nestjs/common';
+import { Controller, Post, Body, Get, Param, Delete, Put, UseGuards, HttpCode, Inject, forwardRef } from '@nestjs/common';
 import { UserService } from '../user.service/user.service';
 import { User, UserRole } from '../user.models/user.interface';
-import { Observable, of } from 'rxjs';
-import { catchError, map } from 'rxjs/operators';
+import { from, Observable, of } from 'rxjs';
+import { catchError, map, switchMap } from 'rxjs/operators';
 import { Interessen } from 'src/interessen/interessen.models/interessen.interface';
 import { hasRoles } from 'src/auth/decorators/role.decorator';
 import { JwtAuthGuard } from 'src/auth/guards/jwt.guard';
 import { RolesGuard } from 'src/auth/guards/roles.guard';
 import { UserCheckGuard } from 'src/auth/guards/UserCheck.guard';
 import { Kalender } from 'src/kalender/kalender.models/kalender.interface';
+import { ConfigService } from '@nestjs/config';
 
 
 @Controller('users')
 export class UserController {
 
-    constructor(private userService: UserService) { }
+    constructor(private userService: UserService) {}
+
+    @Inject(forwardRef(() => ConfigService))
+        private readonly configService: ConfigService
 
     @Post()
     create(@Body() user: User): Observable<User | Object> {
@@ -30,12 +34,19 @@ export class UserController {
 
     @Post('login')
     login(@Body() user: User): Observable<Object> {
-        return this.userService.login(user).pipe(
-            map((jwt: string) => {
-                return {access_token: jwt};
-            }
-            )
-        )
+        return from(this.userService.login(user)).pipe(
+            switchMap((jwt: string) => {
+                if(jwt != "U") {
+                    return from(this.userService.getUsername(user.email)).pipe(
+                        map((username: string) => {
+                            var timeout: string = this.configService.get('JWT_TIMEOUT');
+                            return {access_token: jwt, username: username, timeout: timeout};
+                        }))}
+                
+                else {
+                    return "n";
+                }}))
+                
     }
 
     @UseGuards(JwtAuthGuard, UserCheckGuard)
@@ -71,21 +82,18 @@ export class UserController {
 
 
     @Get(':username/interessen')
-
     findeInteressenZuUser(@Param('username') username: string): Observable<Interessen[]> {
             return this.userService.findeInteressenZuUser(username);
     }
 
 
     @Delete(':username/interessen/:interessenID')
-
     @HttpCode(204)
     deleteTieFromInteresse(@Param('username') username: string, @Param('interessenID') interessenID?: number): void {
             this.userService.deleteTieFromInteresse(username, interessenID);
     }
 
     @Put(':username/kalender/:kalenderID')
-
     @HttpCode(204)
     addTieToKalender(@Param('username') username: string, @Param('kalenderID') kalenderID: number): void {
         this.userService.addTieToKalender(username, kalenderID);

@@ -12,7 +12,7 @@ import { UserInteresseService } from 'src/userInteresse/userInteresse.service/us
 import { UserKalenderService } from 'src/userKalender/userKalender.service/user-kalender.service';
 import { Kalender } from 'src/kalender/kalender.models/kalender.interface';
 import { KalenderService } from 'src/kalender/kalender.service/kalender.service';
-import { Repository } from 'typeorm';
+import { getConnection, Repository } from 'typeorm';
 
 
 
@@ -131,7 +131,7 @@ export class UserService {
                 if (user) {
                     return this.authService.generiereJWT(user).pipe(map((jwt: string) => jwt));
                 } else {
-                    return 'User ' + user.username + " ist unbekannt.";
+                    return 'U';
                 }
             })
         )
@@ -147,7 +147,7 @@ export class UserService {
                         return result;
                     } else {
                         console.log("Falsches Passwort für User: " + user.username + ".");
-                        throw Error;
+                        return null;
                     }
                 })
             ))
@@ -206,6 +206,20 @@ export class UserService {
 
     removeTieFromKalender(username: string, kalenderId: number) {
         this.userKalenderService.deleteUserKalenderTie(kalenderId, username);
+    }
+
+    async getUsername(email1: string): Promise<String> {
+        let username: string;
+    
+        const user = await getConnection()
+        .getRepository(UserEntity)
+        .createQueryBuilder("user")
+        .where("user.email = :email", {email: email1})
+        .getOne();
+
+        username = String(user.username);
+
+        return username;
     }
 
 
