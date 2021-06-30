@@ -1,6 +1,9 @@
 import { forwardRef, Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
+import { AktivitaetenModule } from 'src/aktivitaeten/aktivitaeten.module';
+import { InteressenModule } from 'src/interessen/interessen.module';
+import { KalenderModule } from 'src/kalender/kalender.module';
 import { UserModule } from 'src/user/user.module';
 import { AuthService } from './auth.service/auth.service';
 import { JwtAuthGuard } from './guards/jwt.guard';
@@ -10,6 +13,9 @@ import { RolesGuard } from './guards/roles.guard';
 @Module({
     imports: [
         forwardRef(() => UserModule),
+        forwardRef(() => AktivitaetenModule),
+        forwardRef(() => InteressenModule),
+        forwardRef(() => KalenderModule),
         JwtModule.registerAsync({
             imports: [ConfigModule, JwtStrategy, JwtAuthGuard],
             inject: [ConfigService],
@@ -20,7 +26,7 @@ import { RolesGuard } from './guards/roles.guard';
         })
     ],
     providers: [AuthService, RolesGuard, JwtAuthGuard, JwtStrategy ],
-    exports: [AuthService]
+    exports: [AuthService, RolesGuard]
 
 })
 export class AuthModule {}
