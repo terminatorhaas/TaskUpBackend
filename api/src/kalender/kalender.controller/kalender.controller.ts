@@ -27,10 +27,9 @@ export class KalenderController {
     findAll(): Observable<Kalender[]> {
         return this.kalenderService.findAll();
     }
-/*    
+    
     @hasRoles(UserRole.ADMIN)
-    @UseGuards(JwtAuthGuard, RolesGuard)
-*/    
+    @UseGuards(JwtAuthGuard, RolesGuard)  
     @Put(':kalenderID')
     updateOne(@Param('kalenderID') kalenderID: number, @Body() kalender: Kalender): Observable<any> {
         return this.kalenderService.updateOne(kalenderID, kalender);

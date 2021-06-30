@@ -12,6 +12,7 @@ import { KalenderModule } from 'src/kalender/kalender.module';
 import { KalenderEntity } from 'src/kalender/kalender.models/kalender.entity';
 import { UserInteresseEntity } from 'src/userInteresse/userInteresse.models/userInteresse.entity';
 import { UserKalenderEntity } from 'src/userKalender/userKalender.models/userKalender.entity';
+import { AktivitaetenModule } from 'src/aktivitaeten/aktivitaeten.module';
 
 
 @Module({
@@ -22,6 +23,7 @@ import { UserKalenderEntity } from 'src/userKalender/userKalender.models/userKal
     forwardRef(() => KalenderModule),
     forwardRef(() => UserInteresseModule),
     forwardRef(() => UserKalenderModule),
+    forwardRef(() => AktivitaetenModule)
     
   ],
   providers: [UserService],

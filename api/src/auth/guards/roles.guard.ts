@@ -2,6 +2,7 @@ import { Injectable, CanActivate, ExecutionContext, Inject, forwardRef } from "@
 import { Reflector } from "@nestjs/core";
 import { Observable } from "rxjs";
 import { map } from "rxjs/operators";
+import { AktivitaetenService } from "src/aktivitaeten/aktivitaeten.service/aktivitaeten.service";
 import { UserEntity } from "src/user/user.models/user.entity";
 import { UserService } from "src/user/user.service/user.service";
 
@@ -13,7 +14,7 @@ export class RolesGuard implements CanActivate {
         private reflector: Reflector,
 
         @Inject(forwardRef(() => UserService))
-        private userService: UserService
+        private userService: UserService,
     ) { }
 
     canActivate(context: ExecutionContext): boolean | Promise<boolean> | Observable<boolean> {

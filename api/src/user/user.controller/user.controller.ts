@@ -10,6 +10,7 @@ import { RolesGuard } from 'src/auth/guards/roles.guard';
 import { UserCheckGuard } from 'src/auth/guards/UserCheck.guard';
 import { Kalender } from 'src/kalender/kalender.models/kalender.interface';
 import { ConfigService } from '@nestjs/config';
+import { InteressenEntity } from 'src/interessen/interessen.models/Interessen.entity';
 
 
 @Controller('users')
@@ -80,7 +81,7 @@ export class UserController {
         this.userService.addTieToInteresse(username, interessenID);
     }
 
-
+    @UseGuards(JwtAuthGuard, UserCheckGuard)
     @Get(':username/interessen')
     findeInteressenZuUser(@Param('username') username: string): Observable<Interessen[]> {
             return this.userService.findeInteressenZuUser(username);
@@ -110,8 +111,6 @@ export class UserController {
         return this.userService.removeTieFromKalender(username, kalenderId);
     }
 
-
-
     @hasRoles(UserRole.ADMIN)
     @UseGuards(JwtAuthGuard, RolesGuard)
     @Put(':username/:role')
@@ -119,7 +118,11 @@ export class UserController {
      
         return this.userService.updateRoleOfUser(username,role);
     }
-
+    
+    @Get(':username/vorschlaege')
+    generateVorschlaege(@Param('username') username: string):Observable<InteressenEntity[]>{
+        return ;
+    }
     
 
 }
