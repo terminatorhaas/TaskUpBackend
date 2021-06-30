@@ -25,9 +25,6 @@ export class UserEntity {
   @Column("varchar", { name: "zeitzone", length: 5 })
   zeitzone: string;
 
-  @Column("tinyint", { name: "admin_flag", width: 1 })
-  adminFlag: boolean;
-
   @Column({type: 'enum', enum: UserRole, default: UserRole.USER})
     role: UserRole;
 
