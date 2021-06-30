@@ -13,6 +13,9 @@ import { UserKalenderService } from 'src/userKalender/userKalender.service/user-
 import { Kalender } from 'src/kalender/kalender.models/kalender.interface';
 import { KalenderService } from 'src/kalender/kalender.service/kalender.service';
 import { getConnection, Repository } from 'typeorm';
+import { InteressenEntity } from 'src/interessen/interessen.models/Interessen.entity';
+import { AktivitaetenService } from 'src/aktivitaeten/aktivitaeten.service/aktivitaeten.service';
+import { Aktivitaeten } from 'src/aktivitaeten/aktivitaeten.models/aktivitaeten.interface';
 
 
 
@@ -26,6 +29,9 @@ export class UserService {
 
         @Inject(forwardRef(() => KalenderService))
         private readonly kalenderService: KalenderService,
+
+        @Inject(forwardRef(() => AktivitaetenService))
+        private readonly aktivitaetenService: AktivitaetenService,
 
         @Inject(forwardRef(() => UserInteresseService))
         private readonly userInteressenService: UserInteresseService,
@@ -51,7 +57,6 @@ export class UserService {
                 newUser.vorname = user.vorname;
                 newUser.nachname = user.nachname;
                 newUser.zeitzone = user.zeitzone;
-                newUser.adminFlag = user.adminFlag;
                 newUser.role = UserRole.USER;
                 newUser.interessens = [];
 
@@ -72,14 +77,8 @@ export class UserService {
                             ,
                             catchError(err => throwError(err))
                         )
-                       
                     }
-                    
-                
                 }))
-                
-
-                
             }))
     }
 
@@ -93,8 +92,7 @@ export class UserService {
                 return false;
                 }
             }
-
-            ))
+        ))
     }
 
     findOne(username: string): Observable<User> {
@@ -152,7 +150,6 @@ export class UserService {
                 })
             ))
         )
-
     }
 
     findByMail(email: string): Observable<User> {
@@ -221,6 +218,23 @@ export class UserService {
 
         return username;
     }
-
-
+/*
+    generateVorschlage(username: string):Observable<Aktivitaeten[]>{
+        let vorschlaege: Aktivitaeten[];
+        let interessenArray: Interessen[];
+        this.findeInteressenZuUser(username).pipe(map((interessenArray: Interessen[])=>{
+            console.log("test");  
+            
+            
+                return this.aktivitaetenService.findeAktivitaetZuInteresse(interessenArray[i].interessenID).pipe
+                (map((aktivitaeten: Aktivitaeten[])=>{  return aktivitaeten;   }));
+            
+        })); //Interessen[]
+        
+        
+        return;
+    }
+    */
 }
+
+

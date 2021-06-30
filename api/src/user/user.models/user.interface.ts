@@ -10,7 +10,6 @@ passwort?: string;
 vorname?: string;
 nachname?: string;
 zeitzone?: string;
-adminFlag?: boolean;
 interessens?: UserInteresseEntity[];
 kalenders?: UserKalenderEntity[];
 role?: UserRole;
