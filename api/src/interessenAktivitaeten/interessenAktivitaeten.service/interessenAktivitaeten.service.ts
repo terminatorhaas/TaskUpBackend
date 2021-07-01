@@ -28,7 +28,7 @@ export class InteressenAktivitaetenService {
         const interessenAktivitaeten = await getConnection()
         .getRepository(InteressenAktivitaetenEntity)
         .createQueryBuilder("interessenAktivitaeten")
-        .where("interessenAktivitaeten.interessenID = :interesse", {interesse: interessenId1})
+        .where("interessenAktivitaeten.interessenID = :number", {number: interessenId1})
         .getMany();
 
         for(var i = 0; i < interessenAktivitaeten.length; i++) {

@@ -11,6 +11,7 @@ import { UserCheckGuard } from 'src/auth/guards/UserCheck.guard';
 import { Kalender } from 'src/kalender/kalender.models/kalender.interface';
 import { ConfigService } from '@nestjs/config';
 import { InteressenEntity } from 'src/interessen/interessen.models/Interessen.entity';
+import { Aktivitaeten } from 'src/aktivitaeten/aktivitaeten.models/aktivitaeten.interface';
 
 
 @Controller('users')
@@ -120,8 +121,8 @@ export class UserController {
     }
     
     @Get(':username/vorschlaege')
-    generateVorschlaege(@Param('username') username: string):Observable<InteressenEntity[]>{
-        return ;
+    generateProposal(@Param('username') username: string): Observable<Aktivitaeten>{
+        return this.userService.generateProposal(username);
     }
     
 
