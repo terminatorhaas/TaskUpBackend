@@ -67,14 +67,14 @@ public findeInteressenZuAktivitaet(aktivitaetenId: number): Observable<Interesse
 
 public findeAktivitaetZuInteresse(interessenId: number): Observable<Aktivitaeten[]> {
 
-
-    return from(this.interessenAktivitaetenService.findAktivitaetenZuInteresse(interessenId)).pipe(switchMap((aktivitaetenIds: number[]) => {
-        for (var i = 0; i < aktivitaetenIds.length; i++) {
-            console.log("aktivitaetenService: " + aktivitaetenIds[i]);
-        };
-        return this.aktivitaetenRepository.find({
-            aktivitaetenID: In(aktivitaetenIds)
-        });
+    return from(this.interessenAktivitaetenService.findAktivitaetenZuInteresse(interessenId)).pipe(
+        switchMap((aktivitaetenIds: number[]) => {
+            for (var i = 0; i < aktivitaetenIds.length; i++) {
+                console.log("aktivitaetenService: " + aktivitaetenIds[i]);
+            };
+            return this.aktivitaetenRepository.find({
+                    aktivitaetenID: In(aktivitaetenIds)
+            });
     }));
 }
 

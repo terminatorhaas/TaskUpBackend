@@ -13,7 +13,6 @@ import { UserKalenderService } from 'src/userKalender/userKalender.service/user-
 import { Kalender } from 'src/kalender/kalender.models/kalender.interface';
 import { KalenderService } from 'src/kalender/kalender.service/kalender.service';
 import { getConnection, Repository } from 'typeorm';
-import { InteressenEntity } from 'src/interessen/interessen.models/Interessen.entity';
 import { AktivitaetenService } from 'src/aktivitaeten/aktivitaeten.service/aktivitaeten.service';
 import { Aktivitaeten } from 'src/aktivitaeten/aktivitaeten.models/aktivitaeten.interface';
 
@@ -205,36 +204,31 @@ export class UserService {
         this.userKalenderService.deleteUserKalenderTie(kalenderId, username);
     }
 
-    async getUsername(email1: string): Promise<String> {
+    async getUsername(email: string): Promise<String> {
         let username: string;
-    
-        const user = await getConnection()
-        .getRepository(UserEntity)
-        .createQueryBuilder("user")
-        .where("user.email = :email", {email: email1})
-        .getOne();
-
-        username = String(user.username);
-
+            const user = await getConnection()
+            .getRepository(UserEntity)
+            .createQueryBuilder("user")
+            .where("user.email = :email", {email: email})
+            .getOne();
+            username = String(user.username);
         return username;
     }
-/*
-    generateVorschlage(username: string):Observable<Aktivitaeten[]>{
-        let vorschlaege: Aktivitaeten[];
-        let interessenArray: Interessen[];
-        this.findeInteressenZuUser(username).pipe(map((interessenArray: Interessen[])=>{
-            console.log("test");  
-            
-            
-                return this.aktivitaetenService.findeAktivitaetZuInteresse(interessenArray[i].interessenID).pipe
-                (map((aktivitaeten: Aktivitaeten[])=>{  return aktivitaeten;   }));
-            
-        })); //Interessen[]
-        
-        
-        return;
-    }
+
+    /* This function return an Aktivitaeten Entity that is randdomized and based on the interests of the user, who is transfered. 
     */
+    generateProposal(username: string): Observable<Aktivitaeten>{       
+
+        return this.findeInteressenZuUser(username).pipe(switchMap((interestsArray: Interessen[])=>{
+            
+            return this.aktivitaetenService.findeAktivitaetZuInteresse(interestsArray[0].interessenID)
+                .pipe(map((activitiesArray: Aktivitaeten[])=>{  
+                    return activitiesArray[Math.floor(Math.random() * activitiesArray.length)];   
+                }
+            ));  
+
+        }));   
+    }
 }
 
 

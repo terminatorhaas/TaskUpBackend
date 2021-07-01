@@ -55,4 +55,10 @@ export class AktivitaetenController {
         return this.aktivitaetenService.findeInteressenZuAktivitaet(aktivitaetenId);
     }
 
+
+    @Get('aa/:interessenID')
+    a(@Param('interessenID') interessenID : number): Observable<Aktivitaeten[]>{
+        return this.aktivitaetenService.findeAktivitaetZuInteresse(interessenID);
+    }
+
 }
