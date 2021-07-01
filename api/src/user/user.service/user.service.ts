@@ -221,7 +221,7 @@ export class UserService {
 
         return this.findeInteressenZuUser(username).pipe(switchMap((interestsArray: Interessen[])=>{
             
-            return this.aktivitaetenService.findeAktivitaetZuInteresse(interestsArray[0].interessenID)
+            return this.aktivitaetenService.findeAktivitaetZuInteresse(interestsArray[Math.floor(Math.random() * interestsArray.length)].interessenID)
                 .pipe(map((activitiesArray: Aktivitaeten[])=>{  
                     return activitiesArray[Math.floor(Math.random() * activitiesArray.length)];   
                 }
