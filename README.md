@@ -1,5 +1,5 @@
 <p align="center">
-  <a href="https://github.com/terminatorhaas/TaskUpBackend" target="blank"><img src="TaskUpLogo.png" width="400" alt="TU Logo" /></a>
+  <a href="https://github.com/terminatorhaas/TaskUpBackend" target="blank"><img src="/api/TaskUpLogo.png" width="400" alt="TU Logo" /></a>
 </p>
 
   <h1 align="center"><strong>Backend</strong></h1>
