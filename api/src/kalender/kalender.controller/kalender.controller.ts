@@ -18,9 +18,9 @@ export class KalenderController {
         return this.kalenderService.create(kalender);
     }
 
-    @Get(':kalenderID')
+    @Get(':calendarID')
     findOne(@Param() params): Observable<Kalender> {
-        return this.kalenderService.findOne(params.kalenderID);
+        return this.kalenderService.findOne(params.calendarID);
     }
 
     @Get()
@@ -30,14 +30,14 @@ export class KalenderController {
     
     @hasRoles(UserRole.ADMIN)
     @UseGuards(JwtAuthGuard, RolesGuard)  
-    @Put(':kalenderID')
-    updateOne(@Param('kalenderID') kalenderID: number, @Body() kalender: Kalender): Observable<any> {
-        return this.kalenderService.updateOne(kalenderID, kalender);
+    @Put(':calendarID')
+    updateOne(@Param('calendarID') calendarID: number, @Body() calendar: Kalender): Observable<any> {
+        return this.kalenderService.updateOne(calendarID, calendar);
     }
 
-    @Delete(':kalenderID')
-    deleteOne(@Param('kalenderID') kalenderID: number): Observable<any> {
-        return this.kalenderService.deleteOne(kalenderID);
+    @Delete(':calendarID')
+    deleteOne(@Param('calendarID') calendarID: number): Observable<any> {
+        return this.kalenderService.deleteOne(calendarID);
     }
 
 }

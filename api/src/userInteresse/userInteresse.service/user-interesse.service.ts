@@ -1,12 +1,8 @@
 import { forwardRef, Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { from, Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
-import { Interessen } from 'src/interessen/interessen.models/interessen.interface';
 import { InteressenService } from 'src/interessen/interessen.service/interessen.service';
-import { User } from 'src/user/user.models/user.interface';
 import { Connection, getConnection, Repository } from 'typeorm';
-import { UserInteresse } from '../userInteresse.models/userInteresse';
 import { UserInteresseEntity } from '../userInteresse.models/userInteresse.entity';
 
 @Injectable()
@@ -19,79 +15,77 @@ export class UserInteresseService {
         private readonly interessenService: InteressenService,
     ) { }
 
-    findUserZuInteresse(interesse1: number): Observable<UserInteresseEntity[]> {
+    findUserToInteresse(interestID: number): Observable<UserInteresseEntity[]> {
         return from(this.userInteresseRepository.find({
             select: ["username"],
-            where: { interessenID: interesse1 }
+            where: { interessenID: interestID }
         }));
     }
 
 
-    async findeInteressenZuUser(user1: string): Promise<number[]> {
+    async findInteressenToUser(username: string): Promise<number[]> {
 
 
-        let interessenIds: number[] = [];
+        let interestIDs: number[] = [];
 
-        console.log("Finde Interessen zu User " + user1)
-
-        const userInteressen = await getConnection()
+        const userInterests = await getConnection()
             .getRepository(UserInteresseEntity)
             .createQueryBuilder("userInteressen")
-            .where("userInteressen.username = :user", { user: user1 })
+            .where("userInteressen.username = :user", { user: username })
             .getMany();
 
-        for (var i = 0; i < userInteressen.length; i++) {
-            interessenIds.push(Number(userInteressen[i].interessenID))
+        for (var i = 0; i < userInterests.length; i++) {
+            interestIDs.push(Number(userInterests[i].interessenID))
         }
 
-        return interessenIds;
+        return interestIDs;
     }
 
-    async insertNewUserInteresseTie(interessenId: number, username1: string) {
+    async insertNewUserInteresseTie(interestID: number, username: string) {
         await getConnection()
             .createQueryBuilder()
             .insert()
             .into(UserInteresseEntity)
             .values({
-                interessenID: interessenId,
-                username: username1
+                interessenID: interestID,
+                username: username
             })
             .execute();
     }
 
-    async deleteUserInteresseTie(interessenId: number, username1: string) {
+    async deleteUserInteresseTie(interestID: number, username: string) {
 
         await getConnection()
             .createQueryBuilder()
             .delete()
             .from(UserInteresseEntity)
             .where({
-                interessenID: interessenId,
-                username: username1
+                interessenID: interestID,
+                username: username
             })
             .execute();
     }
 
-    async deleteAlleUserTies(username1: string) {
+    async deleteAllTiesToUser(username: string) {
 
         await getConnection()
             .createQueryBuilder()
             .delete()
             .from(UserInteresseEntity)
             .where({
-                username: username1
+                username: username
             })
             .execute();
     }
 
-    async deleteAlleInteressenTies(interessenId: number) {
+    async deleteAllTiesToInteresse(interestID: number) {
 
         await getConnection()
             .createQueryBuilder()
             .delete()
             .from(UserInteresseEntity)
             .where({
-                interessenID: interessenId
+                interessenID: interestID
             })
             .execute();
     }

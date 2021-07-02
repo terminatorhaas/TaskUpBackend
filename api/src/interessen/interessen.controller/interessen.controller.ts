@@ -16,13 +16,13 @@ export class InteressenController {
     @hasRoles(UserRole.ADMIN)
     @UseGuards(JwtAuthGuard, RolesGuard)
     @Post()
-    create(@Body() interessen: Interessen): Observable<Interessen> {
-        return this.interessenService.create(interessen);
+    create(@Body() interest: Interessen): Observable<Interessen> {
+        return this.interessenService.create(interest);
     }
 
-    @Get(':interessenID')
+    @Get(':interestID')
     findOne(@Param() params): Observable<Interessen> {
-        return this.interessenService.findOne(params.interessenID);
+        return this.interessenService.findOne(params.interestID);
     }
 
     @Get()
@@ -32,38 +32,38 @@ export class InteressenController {
 
     @hasRoles(UserRole.ADMIN)
     @UseGuards(JwtAuthGuard, RolesGuard)
-    @Put(':interessenID')
-    updateOne(@Param('interessenID') interessenID: number, @Body() interesse: Interessen): Observable<any> {
-        return this.interessenService.updateOne(interessenID, interesse);
+    @Put(':interestID')
+    updateOne(@Param('interestID') interestID: number, @Body() interest: Interessen): Observable<any> {
+        return this.interessenService.updateOne(interestID, interest);
     }
 
     @hasRoles(UserRole.ADMIN)
     @UseGuards(JwtAuthGuard, RolesGuard)
-    @Delete(':interessenID')
-    deleteOne(@Param('interessenID') interessenID: number): Observable<any> {
-        return this.interessenService.deleteOne(interessenID);
+    @Delete(':interestID')
+    deleteOne(@Param('interestID') interestID: number): Observable<any> {
+        return this.interessenService.deleteOne(interestID);
     }
 
     @hasRoles(UserRole.ADMIN)
     @UseGuards(JwtAuthGuard, RolesGuard)
-    @Put(':interessenId/aktivitaeten/:aktivitaetenId')
+    @Put(':interestID/aktivitaeten/:activityID')
     @HttpCode(204)
-    addTieToAktivitaet(@Param('interessenId') interessenId: number, @Param('aktivitaetenId') aktivitaetenId: number): void {
-        this.interessenService.addTieToAktivitaet(interessenId, aktivitaetenId);
+    addTieToAktivitaet(@Param('interestID') interestID: number, @Param('activityID') activityID: number): void {
+        this.interessenService.addTieToAktivitaet(interestID, activityID);
     }
 
 
-    @Get(':interessenID/aktivitaeten/')
-    findeInteressenZuAktivitaet(@Param('interessenID') interessenID: number): Observable<Aktivitaeten[]> {
-        return this.interessenService.findeAktivitaetZuInteresse(interessenID);
+    @Get(':interestID/aktivitaeten/')
+    findeInteressenZuAktivitaet(@Param('interestID') interestID: number): Observable<Aktivitaeten[]> {
+        return this.interessenService.findAktivitaetenToInteresse(interestID);
     }
 
     @hasRoles(UserRole.ADMIN)
     @UseGuards(JwtAuthGuard, RolesGuard)
-    @Delete(':interessenID/aktivitaeten/:aktivitaetenID')
+    @Delete(':interestID/aktivitaeten/:activityID')
     @HttpCode(204)
-    removeInteressenAktivitaetenTie(@Param('interessenID') interessenID: number, @Param('aktivitaetenID') aktivitaetenID: number) {
-        return this.interessenService.removeInteressenAktivitaetenTie(interessenID, aktivitaetenID);
+    removeInteressenAktivitaetenTie(@Param('interestID') interestID: number, @Param('activityID') activityID: number) {
+        return this.interessenService.removeInteressenAktivitaetenTie(interestID, activityID);
     }
 
 

@@ -18,95 +18,93 @@ export class InteressenAktivitaetenService {
 
         @Inject(forwardRef(() => AktivitaetenService))
         private readonly aktivitaetenService: AktivitaetenService,
-    ) {}
+    ) { }
 
-    async findAktivitaetenZuInteresse(interessenId1: number): Promise<number[]> {
-        
-        let aktivitaetenIds: number[] = [];
+    async findAktivitaetenToInteresse(interestID: number): Promise<number[]> {
 
-        console.log("Finde Interessen zu Aktivitaet " + interessenId1)
-        const interessenAktivitaeten = await getConnection()
-        .getRepository(InteressenAktivitaetenEntity)
-        .createQueryBuilder("interessenAktivitaeten")
-        .where("interessenAktivitaeten.interessenID = :number", {number: interessenId1})
-        .getMany();
+        let activityIDs: number[] = [];
 
-        for(var i = 0; i < interessenAktivitaeten.length; i++) {
-            aktivitaetenIds.push(Number (interessenAktivitaeten[i].aktivitaetenID))
+        const interestActivities = await getConnection()
+            .getRepository(InteressenAktivitaetenEntity)
+            .createQueryBuilder("interessenAktivitaeten")
+            .where("interessenAktivitaeten.interessenID = :number", { number: interestID })
+            .getMany();
+
+        for (var i = 0; i < interestActivities.length; i++) {
+            activityIDs.push(Number(interestActivities[i].aktivitaetenID))
+        }
+        return activityIDs;
+    }
+
+
+    async findInteressenToAktivitaet(activityID: number): Promise<number[]> {
+
+        let interestIDs: number[] = [];
+
+        const interestActivities = await getConnection()
+            .getRepository(InteressenAktivitaetenEntity)
+            .createQueryBuilder("interessenAktivitaeten")
+            .where("interessenAktivitaeten.aktivitaetenID = :activity", { activity: activityID })
+            .getMany();
+
+        for (var i = 0; i < interestActivities.length; i++) {
+            interestIDs.push(Number(interestActivities[i].interessenID))
         }
 
-        return aktivitaetenIds;
-            }
-
-
-    async findeInteressenZuAktivitaet(aktivitaetenId1: number): Promise<number[]> {
-        let interessenIds: number[] = [];
-
-        console.log("Finde Interessen zu Aktivitaet " + aktivitaetenId1)
-        const interessenAktivitaeten = await getConnection()
-        .getRepository(InteressenAktivitaetenEntity)
-        .createQueryBuilder("interessenAktivitaeten")
-        .where("interessenAktivitaeten.aktivitaetenID = :aktivitaet", {aktivitaet: aktivitaetenId1})
-        .getMany();
-
-        for(var i = 0; i < interessenAktivitaeten.length; i++) {
-            interessenIds.push(Number (interessenAktivitaeten[i].interessenID))
-        }
-
-        return interessenIds;
-            }
-        
-    async insertNewAktivitaetenInteresseTie(interessenId: number, aktivitaetenId: number) {
-        await getConnection()
-        .createQueryBuilder()
-        .insert()
-        .into(InteressenAktivitaetenEntity)
-        .values({ 
-        interessenID: interessenId, 
-        aktivitaetenID: aktivitaetenId
-    })
-        .execute();
+        return interestIDs;
     }
 
-    async deleteAktivitaetenInteresseTie(interessenId: number, aktivitaetenId: number) {
-
+    async insertNewAktivitaetenInteresseTie(interestID: number, activityID: number) {
         await getConnection()
-        .createQueryBuilder()
-        .delete()
-        .from(InteressenAktivitaetenEntity)
-        .where({ 
-        interessenID: interessenId, 
-        aktivitaetenID: aktivitaetenId
-    })
-        .execute();
+            .createQueryBuilder()
+            .insert()
+            .into(InteressenAktivitaetenEntity)
+            .values({
+                interessenID: interestID,
+                aktivitaetenID: activityID
+            })
+            .execute();
     }
 
-    async deleteAlleAktivitaetenTies(aktivitaetenId: number) {
+    async deleteAktivitaetenInteresseTie(interestID: number, activityID: number) {
 
         await getConnection()
-        .createQueryBuilder()
-        .delete()
-        .from(InteressenAktivitaetenEntity)
-        .where({ 
-        aktivitaetenID: aktivitaetenId
-    })
-        .execute();
+            .createQueryBuilder()
+            .delete()
+            .from(InteressenAktivitaetenEntity)
+            .where({
+                interessenID: interestID,
+                aktivitaetenID: activityID
+            })
+            .execute();
     }
 
-    async deleteAlleInteressenTies(interessenId: number) {
+    async deleteAllTiesToAktivitaet(activityID: number) {
 
         await getConnection()
-        .createQueryBuilder()
-        .delete()
-        .from(InteressenAktivitaetenEntity)
-        .where({ 
-        interessenID: interessenId
-    })
-        .execute();
+            .createQueryBuilder()
+            .delete()
+            .from(InteressenAktivitaetenEntity)
+            .where({
+                aktivitaetenID: activityID
+            })
+            .execute();
+    }
+
+    async deleteAllTiesToInteresse(interestID: number) {
+
+        await getConnection()
+            .createQueryBuilder()
+            .delete()
+            .from(InteressenAktivitaetenEntity)
+            .where({
+                interessenID: interestID
+            })
+            .execute();
     }
 
 
-    
+
 
 
 }

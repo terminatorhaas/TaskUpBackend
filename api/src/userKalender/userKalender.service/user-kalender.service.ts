@@ -13,96 +13,92 @@ export class UserKalenderService {
 
         @Inject(forwardRef(() => KalenderService))
         private kalenderService: KalenderService,
-    ) {}
+    ) { }
 
 
-    async findeUserZuKalender(kalenderId: number): Promise<string[]> {
-        let usernamen: string[] = [];
-        
-        console.log("Finde User zu Kalender " + kalenderId)
-        
-        const userKalender = await getConnection()
-        .getRepository(UserKalenderEntity)
-        .createQueryBuilder("userKalender")
-        .where("userKalender.kalenderID = :kalender", {kalender: kalenderId})
-        .getMany();
+    async findUsersToKalender(calendarID: number): Promise<string[]> {
+        let usernames: string[] = [];
 
-        for(var i = 0; i < userKalender.length; i++) {
-            usernamen.push(String(userKalender[i].username))
+        const userCalendar = await getConnection()
+            .getRepository(UserKalenderEntity)
+            .createQueryBuilder("userKalender")
+            .where("userKalender.kalenderID = :calendar", { calendar: calendarID })
+            .getMany();
+
+        for (var i = 0; i < userCalendar.length; i++) {
+            usernames.push(String(userCalendar[i].username))
         }
-        return usernamen;
-            
+        return usernames;
+
     }
 
-    async findeKalenderZuUser(username: string): Promise<number[]> {
-        
-        let kalenderIds: number[] = [];
-        
-        console.log("Finde Interessen zu User " + username)
-        
-        const userKalender = await getConnection()
-        .getRepository(UserKalenderEntity)
-        .createQueryBuilder("userKalender")
-        .where("userKalender.username = :user1", {user1: username})
-        .getMany();
+    async findKalenderToUser(username: string): Promise<number[]> {
 
-        for(var i = 0; i < userKalender.length; i++) {
-            kalenderIds.push(Number (userKalender[i].kalenderID))
+        let calendarIDs: number[] = [];
+
+        const userKalender = await getConnection()
+            .getRepository(UserKalenderEntity)
+            .createQueryBuilder("userKalender")
+            .where("userKalender.username = :username", { username: username })
+            .getMany();
+
+        for (var i = 0; i < userKalender.length; i++) {
+            calendarIDs.push(Number(userKalender[i].kalenderID))
         }
 
-        return kalenderIds;
-            }
-        
-    async insertNewUserKalenderTie(kalenderId: number, username1: string) {
-        await getConnection()
-        .createQueryBuilder()
-        .insert()
-        .into(UserKalenderEntity)
-        .values({ 
-        kalenderID: kalenderId, 
-        username: username1
-    })
-        .execute();
+        return calendarIDs;
     }
 
-    async deleteUserKalenderTie(kalenderId: number, username1: string) {
-
+    async insertNewUserKalenderTie(calendarID: number, username: string) {
         await getConnection()
-        .createQueryBuilder()
-        .delete()
-        .from(UserKalenderEntity)
-        .where({ 
-            kalenderID: kalenderId, 
-        username: username1
-    })
-        .execute();
+            .createQueryBuilder()
+            .insert()
+            .into(UserKalenderEntity)
+            .values({
+                kalenderID: calendarID,
+                username: username
+            })
+            .execute();
     }
 
-    async deleteAlleUserTies(username1: string) {
+    async deleteUserKalenderTie(calendarID: number, username: string) {
 
         await getConnection()
-        .createQueryBuilder()
-        .delete()
-        .from(UserKalenderEntity)
-        .where({ 
-        username: username1
-    })
-        .execute();
+            .createQueryBuilder()
+            .delete()
+            .from(UserKalenderEntity)
+            .where({
+                kalenderID: calendarID,
+                username: username
+            })
+            .execute();
     }
 
-    async deleteAlleKalenderTies(kalenderId: number) {
+    async deleteAllTiesToUser(username: string) {
 
         await getConnection()
-        .createQueryBuilder()
-        .delete()
-        .from(UserKalenderEntity)
-        .where({ 
-        kalenderID: kalenderId
-    })
-        .execute();
+            .createQueryBuilder()
+            .delete()
+            .from(UserKalenderEntity)
+            .where({
+                username: username
+            })
+            .execute();
     }
 
-   
+    async deleteAllTiesToKalender(calendarID: number) {
+
+        await getConnection()
+            .createQueryBuilder()
+            .delete()
+            .from(UserKalenderEntity)
+            .where({
+                kalenderID: calendarID
+            })
+            .execute();
+    }
+
+
 
 
 

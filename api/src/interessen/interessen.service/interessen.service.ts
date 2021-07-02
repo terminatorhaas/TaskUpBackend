@@ -66,8 +66,8 @@ export class InteressenService {
 
     deleteOne(interessenID: number): Observable<any> {
         console.log("Interessen: " + interessenID + " gelöscht.");
-        this.userInteresseService.deleteAlleInteressenTies(interessenID);
-        this.interessenAktivitaetenService.deleteAlleInteressenTies(interessenID);
+        this.userInteresseService.deleteAllTiesToInteresse(interessenID);
+        this.interessenAktivitaetenService.deleteAllTiesToInteresse(interessenID);
         return from(this.interessenRepository.delete(interessenID));
     }
 
@@ -76,15 +76,11 @@ export class InteressenService {
         return from(this.interessenRepository.findOne(interessenID));
     }
 
-    public getInteresseZuUser(username: string): Observable<Interessen[]> {
+    public getInteresseToUser(username: string): Observable<Interessen[]> {
 
         const interessenIds: number[] = [];
 
-        return from(this.userInteresseService.findeInteressenZuUser(username)).pipe(switchMap((interessenIds: number[]) => {
-            
-            for (var i = 0; i < interessenIds.length; i++) {
-                console.log("interessenService: " + interessenIds[i]);
-            };
+        return from(this.userInteresseService.findInteressenToUser(username)).pipe(switchMap((interessenIds: number[]) => {
             return this.interessenRepository.find({
                 interessenID: In(interessenIds)
             });
@@ -93,23 +89,19 @@ export class InteressenService {
     }
 
 
-    public findeInteressenZuAktivitaet(aktivitaetenId: number): Observable<Interessen[]> {
+    public findInteressenToAktivitaet(aktivitaetenId: number): Observable<Interessen[]> {
 
         const interessenIds: number[] = [];
     
-        return from(this.interessenAktivitaetenService.findeInteressenZuAktivitaet(aktivitaetenId)).pipe(switchMap((interessenIds: number[]) => {
-            
-            for (var i = 0; i < interessenIds.length; i++) {
-                console.log("interessenService: " + interessenIds[i]);
-            };
+        return from(this.interessenAktivitaetenService.findInteressenToAktivitaet(aktivitaetenId)).pipe(switchMap((interessenIds: number[]) => {
             return this.interessenRepository.find({
                 interessenID: In(interessenIds)
             });
         }));
     }
 
-    public findeAktivitaetZuInteresse(interessenId: number): Observable<Aktivitaeten[]> {
-        return from(this.aktivitaetenService.findeAktivitaetZuInteresse(interessenId));
+    public findAktivitaetenToInteresse(interessenId: number): Observable<Aktivitaeten[]> {
+        return from(this.aktivitaetenService.findAktivitaetenToInteresse(interessenId));
     }
 
     public removeInteressenAktivitaetenTie(interessenId: number, aktivitaetenId: number) {
@@ -118,7 +110,7 @@ export class InteressenService {
 
     addTieToAktivitaet(interessenId: number, aktivitaetenId: number): void {
         this.interessenAktivitaetenService.insertNewAktivitaetenInteresseTie(interessenId, aktivitaetenId);
-            }
+    }
 
 
 

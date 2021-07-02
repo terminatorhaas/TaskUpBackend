@@ -10,70 +10,62 @@ import { Ereignis } from '../ereignis.models/ereignis.interface';
 export class EreignisService {
 
     constructor(
-    @InjectRepository(EreignisEntity) private readonly ereignisRepository: Repository<EreignisEntity>,
-    ) {}
+        @InjectRepository(EreignisEntity) private readonly ereignisRepository: Repository<EreignisEntity>,
+    ) { }
 
 
-    create(ereignis: EreignisEntity): Observable<any> {
-        return from(this.ereignisRepository.save(ereignis));
+    create(event: EreignisEntity): Observable<any> {
+        return from(this.ereignisRepository.save(event));
     }
 
-    findOne(ereignisId: number, kalenderId: number): Observable<Ereignis> {
-        return from(this.ereignisRepository.findOne({"ereignisId": ereignisId,"kalenderId": kalenderId}));
+    findOne(eventID: number, calendarID: number): Observable<Ereignis> {
+        return from(this.ereignisRepository.findOne({ "ereignisId": eventID, "kalenderId": calendarID }));
     }
 
-    updateOne(ereignisId: number, kalenderId: number, ereignis: Ereignis): Observable<any> {
-        console.log("Ereignis: " + ereignisId + " geändert.");
-            return from(this.ereignisRepository.update({"ereignisId": ereignisId,"kalenderId": kalenderId}, ereignis));
+    updateOne(eventID: number, calendarID: number, event: Ereignis): Observable<any> {
+        return from(this.ereignisRepository.update({ "ereignisId": eventID, "kalenderId": calendarID }, event));
     }
 
-    deleteOne(ereignisId: number, kalenderId: number): Observable<any> {
-        return from(this.ereignisRepository.delete({"ereignisId": ereignisId,"kalenderId": kalenderId}));
+    deleteOne(eventID: number, calendarID: number): Observable<any> {
+        return from(this.ereignisRepository.delete({ "ereignisId": eventID, "kalenderId": calendarID }));
     }
 
 
-    findEreignisseZuKalender(kalenderId: number): Observable<Ereignis[]> {
-
-        return from(this.selectEreignisseZuKalender(kalenderId)).pipe(switchMap((ereignisIds: number[]) => {
-            
-            for (var i = 0; i < ereignisIds.length; i++) {
-                console.log("Ereignis: " + ereignisIds[i]);
-            };
+    findEreignisseToKalender(calendarID: number): Observable<Ereignis[]> {
+        return from(this.selectEreignisseToKalender(calendarID)).pipe(switchMap((eventIDs: number[]) => {
             return this.ereignisRepository.find({
-                ereignisId: In(ereignisIds)
+                ereignisId: In(eventIDs)
             });
         }));
     }
 
 
-    async selectEreignisseZuKalender(kalenderId: number): Promise<number[]> {
-        let ereignisse: number[] = [];
-        
-        console.log("Finde Ereignisse zu Kalender " + kalenderId);
+    async selectEreignisseToKalender(calendarID: number): Promise<number[]> {
+        let events: number[] = [];
 
-        const ereignisseZuKalender = await getConnection()
-        .getRepository(EreignisEntity)
-        .createQueryBuilder("ereignisse")
-        .where("ereignisse.kalenderId = :kalender", {kalender: kalenderId})
-        .getMany();
+        const eventsToCalendar = await getConnection()
+            .getRepository(EreignisEntity)
+            .createQueryBuilder("ereignisse")
+            .where("ereignisse.kalenderId = :calendar", { calendar: calendarID })
+            .getMany();
 
-        for(var i = 0; i < ereignisseZuKalender.length; i++) {
-            ereignisse.push(Number(ereignisseZuKalender[i].ereignisId))
+        for (var i = 0; i < eventsToCalendar.length; i++) {
+            events.push(Number(eventsToCalendar[i].ereignisId))
         }
 
-        return ereignisse;
+        return events;
     }
 
-    async deleteAlleKalenderTies(kalenderID: number) {
+    async deleteAllTiesToKalender(calendarID: number) {
 
         await getConnection()
-        .createQueryBuilder()
-        .delete()
-        .from(EreignisEntity)
-        .where({ 
-        kalenderId: kalenderID
-    })
-        .execute();
+            .createQueryBuilder()
+            .delete()
+            .from(EreignisEntity)
+            .where({
+                kalenderId: calendarID
+            })
+            .execute();
     }
 
 }

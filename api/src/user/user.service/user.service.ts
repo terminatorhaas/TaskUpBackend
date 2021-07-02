@@ -38,7 +38,6 @@ export class UserService {
         @Inject(forwardRef(() => UserKalenderService))
         private readonly userKalenderService: UserKalenderService,
 
-
         @Inject(forwardRef(() => AuthService))
         private authService: AuthService
 
@@ -46,31 +45,27 @@ export class UserService {
 
 
     create(user: User): Observable<any> {
-        return this.authService.hashPasswort(user.passwort).pipe(
-            switchMap((passwortHash: string) => {
+        return this.authService.hashPassword(user.passwort).pipe(
+            switchMap((passwordHash: string) => {
 
                 const newUser = new UserEntity();
                 newUser.username = user.username;
                 newUser.email = user.email;
-                newUser.passwort = passwortHash;
+                newUser.passwort = passwordHash;
                 newUser.vorname = user.vorname;
                 newUser.nachname = user.nachname;
                 newUser.zeitzone = user.zeitzone;
                 newUser.role = UserRole.USER;
                 newUser.interessens = [];
 
-                return this.checkIfUserExists(newUser.username).pipe(switchMap((match: boolean) => { 
-                    console.log("test");
-                    if (match) { 
-                        console.log("User existiert bereits (username)"); 
-                        throwError; 
-                        return null; 
-                    } else{
+                return this.checkIfUserExists(newUser.username).pipe(switchMap((match: boolean) => {
+                    if (match) {
+                        throwError;
+                        return null;
+                    } else {
                         return from(this.userRepository.save(newUser)).pipe(
                             map((user: User) => {
-        
                                 const { passwort, ...result } = user;
-                                console.log("Neuer User: " + newUser.username + " hinzugefügt.");
                                 return result;
                             })
                             ,
@@ -86,12 +81,11 @@ export class UserService {
             map((user: User) => {
                 if (user != undefined) {
                     return true;
-                }else{
-                console.log("der user existiert nicht")
-                return false;
+                } else {
+                    return false;
                 }
             }
-        ))
+            ))
     }
 
     findOne(username: string): Observable<User> {
@@ -99,7 +93,6 @@ export class UserService {
     }
 
     findAll(): Observable<User[]> {
-        console.log("Alle User gefunden");
         return from(this.userRepository.find()).pipe(
             map((users: User[]) => {
                 users.forEach(function (v) { delete v.passwort });
@@ -109,16 +102,14 @@ export class UserService {
     }
 
     deleteOne(username: string): Observable<any> {
-        console.log("User: " + username + " gelöscht.");
-        this.userKalenderService.deleteAlleUserTies(username);
-        this.userInteressenService.deleteAlleUserTies(username);
+        this.userKalenderService.deleteAllTiesToUser(username);
+        this.userInteressenService.deleteAllTiesToUser(username);
         return from(this.userRepository.delete(username));
     }
 
     updateOne(username: string, user: User): Observable<any> {
         delete user.email;
         delete user.passwort;
-        console.log("User: " + username + " geändert.");
         return from(this.userRepository.update(username, user));
     }
 
@@ -126,17 +117,17 @@ export class UserService {
         return this.validateUser(user.email, user.passwort).pipe(
             switchMap((user: User) => {
                 if (user) {
-                    return this.authService.generiereJWT(user).pipe(map((jwt: string) => jwt));
+                    return this.authService.generateJWT(user).pipe(map((jwt: string) => jwt));
                 } else {
                     return 'U';
                 }
             })
         )
     }
-    
+
     validateUser(email: string, passwort: string): Observable<User> {
         return this.findByMail(email).pipe(
-            switchMap((user: User) => this.authService.vergleichePasswort(passwort, user.passwort).pipe(
+            switchMap((user: User) => this.authService.comparePassword(passwort, user.passwort).pipe(
                 map((match: boolean) => {
                     if (match) {
                         console.log("Eingegebenes Passwort für User: " + user.username + " stimmt überein.");
@@ -155,8 +146,8 @@ export class UserService {
         return from(this.userRepository.findOne({ email }));
     }
 
-    addTieToInteresse(username: string, interessenID: number): void {
-        this.userInteressenService.insertNewUserInteresseTie(interessenID, username);
+    addTieToInteresse(username: string, interestID: number): void {
+        this.userInteressenService.insertNewUserInteresseTie(interestID, username);
     }
 
 
@@ -174,7 +165,6 @@ export class UserService {
                     mappedUser.role = UserRole.USER;
                     break;
                 } default: {
-                    console.log("Es wird ein Error geworfen")
                     throw new Error("Incompatible User.Role");
                 }
             }
@@ -182,52 +172,52 @@ export class UserService {
         }));
     }
 
-    findeInteressenZuUser(username: string): Observable<Interessen[]> {
-        return this.interessenService.getInteresseZuUser(username);
+    findInteressenToUser(username: string): Observable<Interessen[]> {
+        return this.interessenService.getInteresseToUser(username);
     }
 
-    deleteTieFromInteresse(username: string, interessenID: number): void {
-        this.userInteressenService.deleteUserInteresseTie(interessenID, username);
-
-    }
-
-    addTieToKalender(username: string, kalenderID: number): void {
-        this.userKalenderService.insertNewUserKalenderTie(kalenderID, username);
-    }
-
-    findeKalenderZuUser(username: string): Observable<Kalender[]> {
-        return this.kalenderService.getKalenderZuUser(username);
+    deleteTieFromInteresse(username: string, interestID: number): void {
+        this.userInteressenService.deleteUserInteresseTie(interestID, username);
 
     }
 
-    removeTieFromKalender(username: string, kalenderId: number) {
-        this.userKalenderService.deleteUserKalenderTie(kalenderId, username);
+    addTieToKalender(username: string, calendarID: number): void {
+        this.userKalenderService.insertNewUserKalenderTie(calendarID, username);
+    }
+
+    findKalenderToUser(username: string): Observable<Kalender[]> {
+        return this.kalenderService.getKalenderToUser(username);
+
+    }
+
+    removeTieFromKalender(username: string, calendarID: number) {
+        this.userKalenderService.deleteUserKalenderTie(calendarID, username);
     }
 
     async getUsername(email: string): Promise<String> {
         let username: string;
-            const user = await getConnection()
+        const user = await getConnection()
             .getRepository(UserEntity)
             .createQueryBuilder("user")
-            .where("user.email = :email", {email: email})
+            .where("user.email = :email", { email: email })
             .getOne();
-            username = String(user.username);
+        username = String(user.username);
         return username;
     }
 
     /* This function return an Aktivitaeten Entity that is randdomized and based on the interests of the user, who is transfered. 
     */
-    generateProposal(username: string): Observable<Aktivitaeten>{       
+    generateProposal(username: string): Observable<Aktivitaeten> {
 
-        return this.findeInteressenZuUser(username).pipe(switchMap((interestsArray: Interessen[])=>{
-            
-            return this.aktivitaetenService.findeAktivitaetZuInteresse(interestsArray[Math.floor(Math.random() * interestsArray.length)].interessenID)
-                .pipe(map((activitiesArray: Aktivitaeten[])=>{  
-                    return activitiesArray[Math.floor(Math.random() * activitiesArray.length)];   
+        return this.findInteressenToUser(username).pipe(switchMap((interestsArray: Interessen[]) => {
+
+            return this.aktivitaetenService.findAktivitaetenToInteresse(interestsArray[Math.floor(Math.random() * interestsArray.length)].interessenID)
+                .pipe(map((activitiesArray: Aktivitaeten[]) => {
+                    return activitiesArray[Math.floor(Math.random() * activitiesArray.length)];
                 }
-            ));  
+                ));
 
-        }));   
+        }));
     }
 }
 

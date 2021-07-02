@@ -37,28 +37,28 @@ export class AktivitaetenController {
 
     @hasRoles(UserRole.ADMIN)
     @UseGuards(JwtAuthGuard, RolesGuard)
-    @Put(':aktivitaetenID')
-    updateOne(@Param('aktivitaetenID') aktivitaetenID: number, @Body() aktivitaet: Aktivitaeten): Observable<any> {
-        return this.aktivitaetenService.updateOne(aktivitaetenID, aktivitaet);
+    @Put(':activityID')
+    updateOne(@Param('activityID') activityID: number, @Body() activity: Aktivitaeten): Observable<any> {
+        return this.aktivitaetenService.updateOne(activityID, activity);
     }
     
     @hasRoles(UserRole.ADMIN)
     @UseGuards(JwtAuthGuard, RolesGuard)  
-    @Delete(':aktivitaetenID')
-    deleteOne(@Param('aktivitaetenID') aktivitaetenID: number): Observable<any> {
-        return this.aktivitaetenService.deleteOne(aktivitaetenID);
+    @Delete(':activityID')
+    deleteOne(@Param('activityID') activityID: number): Observable<any> {
+        return this.aktivitaetenService.deleteOne(activityID);
 
     }
 
-    @Get(':aktivitaetenId/interessen/')
-    findeInteressenZuAktivitaet(@Param('aktivitaetenId') aktivitaetenId: number): Observable<Interessen[]> {
-        return this.aktivitaetenService.findeInteressenZuAktivitaet(aktivitaetenId);
+    @Get(':activityID/interessen/')
+    findInteressenToAktivitaet(@Param('activityID') activityID: number): Observable<Interessen[]> {
+        return this.aktivitaetenService.findInteressenToAktivitaet(activityID);
     }
 
 
-    @Get('aa/:interessenID')
-    a(@Param('interessenID') interessenID : number): Observable<Aktivitaeten[]>{
-        return this.aktivitaetenService.findeAktivitaetZuInteresse(interessenID);
+    @Get('aa/:interestID')
+    findAktivitaetenToInteresse(@Param('interestID') interestID : number): Observable<Aktivitaeten[]>{
+        return this.aktivitaetenService.findAktivitaetenToInteresse(interestID);
     }
 
 }

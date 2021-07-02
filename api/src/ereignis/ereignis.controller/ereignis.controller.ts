@@ -12,32 +12,32 @@ export class EreignisController {
     constructor(private ereignisService: EreignisService) { }
 
     @Post()
-    create(@Body() ereignis: EreignisEntity): Observable<EreignisEntity | Object> {
-        return this.ereignisService.create(ereignis).pipe(
-            map((ereignis: Ereignis) => ereignis),
+    create(@Body() event: EreignisEntity): Observable<EreignisEntity | Object> {
+        return this.ereignisService.create(event).pipe(
+            map((event: Ereignis) => event),
             catchError(err => of({error: err.message}))
         );
     }
 
-    @Get('kalender/:kalenderID')
-    findEreignisseZuKalender(@Param('kalenderID') kalenderID: number): Observable<Ereignis[]> {
-        return from(this.ereignisService.findEreignisseZuKalender(kalenderID));
+    @Get('kalender/:calendarID')
+    findEreignisseToKalender(@Param('calendarID') calendarID: number): Observable<Ereignis[]> {
+        return from(this.ereignisService.findEreignisseToKalender(calendarID));
     }
 
-    @Get(':ereignisID/:kalenderID')
-    findOne(@Param('ereignisID') ereignisID: number, @Param('kalenderID') kalenderID: number): Observable<Ereignis> {
-        return from(this.ereignisService.findOne(ereignisID, kalenderID));
+    @Get(':eventID/:calendarID')
+    findOne(@Param('eventID') eventID: number, @Param('calendarID') calendarID: number): Observable<Ereignis> {
+        return from(this.ereignisService.findOne(eventID, calendarID));
     }
 
-    @Put(':ereignisID/:kalenderID')
-    updateOne(@Param('ereignisID') ereignisID: number,  @Param('kalenderID') kalenderID: number, @Body() ereignis: Ereignis): Observable<any> {
-        return this.ereignisService.updateOne(ereignisID, kalenderID, ereignis);
+    @Put(':eventID/:calendarID')
+    updateOne(@Param('eventID') eventID: number,  @Param('calendarID') calendarID: number, @Body() event: Ereignis): Observable<any> {
+        return this.ereignisService.updateOne(eventID, calendarID, event);
     }
 
-    @Delete(':ereignisID/:kalenderID')
+    @Delete(':eventID/:calendarID')
     @HttpCode(204)
-    deleteOne(@Param('ereignisID') ereignisID: number, @Param('kalenderID') kalenderID: number): Observable<any> {
-        return this.ereignisService.deleteOne(ereignisID, kalenderID);
+    deleteOne(@Param('eventID') eventID: number, @Param('calendarID') calendarID: number): Observable<any> {
+        return this.ereignisService.deleteOne(eventID, calendarID);
     }
 
 

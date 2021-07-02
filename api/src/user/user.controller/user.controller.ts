@@ -10,7 +10,6 @@ import { RolesGuard } from 'src/auth/guards/roles.guard';
 import { UserCheckGuard } from 'src/auth/guards/UserCheck.guard';
 import { Kalender } from 'src/kalender/kalender.models/kalender.interface';
 import { ConfigService } from '@nestjs/config';
-import { InteressenEntity } from 'src/interessen/interessen.models/Interessen.entity';
 import { Aktivitaeten } from 'src/aktivitaeten/aktivitaeten.models/aktivitaeten.interface';
 
 
@@ -25,7 +24,6 @@ export class UserController {
     @Post()
     create(@Body() user: User): Observable<User | Object> {
         
-            console.log("ich bin noch da")
             return this.userService.create(user).pipe(
                 map((user: User) => user),
                 catchError(err => of({error: err.message}))
@@ -84,8 +82,8 @@ export class UserController {
 
     @UseGuards(JwtAuthGuard, UserCheckGuard)
     @Get(':username/interessen')
-    findeInteressenZuUser(@Param('username') username: string): Observable<Interessen[]> {
-            return this.userService.findeInteressenZuUser(username);
+    findInteressenToUser(@Param('username') username: string): Observable<Interessen[]> {
+            return this.userService.findInteressenToUser(username);
     }
 
 
@@ -102,8 +100,8 @@ export class UserController {
     }
 
     @Get(':username/kalender/')
-    findeKalenderZuUser(@Param('username') username: string): Observable<Kalender[]> {
-        return this.userService.findeKalenderZuUser(username);
+    findKalenderToUser(@Param('username') username: string): Observable<Kalender[]> {
+        return this.userService.findKalenderToUser(username);
     }
 
     @Delete(':username/kalender/:kalenderId')
