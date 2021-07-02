@@ -1,7 +1,4 @@
 import { forwardRef, Inject, Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { from, Observable } from 'rxjs';
-import { AktivitaetenEntity } from 'src/aktivitaeten/aktivitaeten.models/aktivitaeten.entity';
 import { AktivitaetenService } from 'src/aktivitaeten/aktivitaeten.service/aktivitaeten.service';
 import { InteressenService } from 'src/interessen/interessen.service/interessen.service';
 import { getConnection, Repository } from 'typeorm';
@@ -10,8 +7,8 @@ import { InteressenAktivitaetenEntity } from '../interessenAktivitaeten.models/i
 @Injectable()
 export class InteressenAktivitaetenService {
 
+    //loading of necessary external service modules, local repository not needed
     constructor(
-        @InjectRepository(InteressenAktivitaetenEntity) private readonly interessenAktivitaetenRepository: Repository<InteressenAktivitaetenEntity>,
 
         @Inject(forwardRef(() => InteressenService))
         private readonly interessenService: InteressenService,
@@ -22,16 +19,16 @@ export class InteressenAktivitaetenService {
 
     async findAktivitaetenToInteresse(interestID: number): Promise<number[]> {
 
-        let activityIDs: number[] = [];
+        let activityIDs: number[] = []; //array to contain output IDs
 
-        const interestActivities = await getConnection()
+        const interestActivities = await getConnection()                                        //Performing select operation on DB
             .getRepository(InteressenAktivitaetenEntity)
             .createQueryBuilder("interessenAktivitaeten")
             .where("interessenAktivitaeten.interessenID = :number", { number: interestID })
             .getMany();
 
         for (var i = 0; i < interestActivities.length; i++) {
-            activityIDs.push(Number(interestActivities[i].aktivitaetenID))
+            activityIDs.push(Number(interestActivities[i].aktivitaetenID))                      //just IDs are needed --> extraction of those
         }
         return activityIDs;
     }
@@ -39,23 +36,24 @@ export class InteressenAktivitaetenService {
 
     async findInteressenToAktivitaet(activityID: number): Promise<number[]> {
 
-        let interestIDs: number[] = [];
+        let interestIDs: number[] = []; //array to contain output IDs
 
-        const interestActivities = await getConnection()
+        const interestActivities = await getConnection()                                        //Performing select operation on DB
             .getRepository(InteressenAktivitaetenEntity)
             .createQueryBuilder("interessenAktivitaeten")
             .where("interessenAktivitaeten.aktivitaetenID = :activity", { activity: activityID })
             .getMany();
 
         for (var i = 0; i < interestActivities.length; i++) {
-            interestIDs.push(Number(interestActivities[i].interessenID))
+            interestIDs.push(Number(interestActivities[i].interessenID))                        //just IDs are needed --> extraction of those
         }
 
         return interestIDs;
     }
 
+    //add new relation
     async insertNewAktivitaetenInteresseTie(interestID: number, activityID: number) {
-        await getConnection()
+        await getConnection()                                                                   //Performing insert operation on DB
             .createQueryBuilder()
             .insert()
             .into(InteressenAktivitaetenEntity)
@@ -66,9 +64,10 @@ export class InteressenAktivitaetenService {
             .execute();
     }
 
+    //Delete specific relation
     async deleteAktivitaetenInteresseTie(interestID: number, activityID: number) {
 
-        await getConnection()
+        await getConnection()                                                                   //Performing delete operation on DB
             .createQueryBuilder()
             .delete()
             .from(InteressenAktivitaetenEntity)
@@ -79,9 +78,10 @@ export class InteressenAktivitaetenService {
             .execute();
     }
 
+    //Used to ensure that integrity constraints of DB are met
     async deleteAllTiesToAktivitaet(activityID: number) {
 
-        await getConnection()
+        await getConnection()                                                                   //Performing delete operation on DB
             .createQueryBuilder()
             .delete()
             .from(InteressenAktivitaetenEntity)
@@ -91,9 +91,10 @@ export class InteressenAktivitaetenService {
             .execute();
     }
 
+    //Used to ensure that integrity constraints of DB are met
     async deleteAllTiesToInteresse(interestID: number) {
 
-        await getConnection()
+        await getConnection()                                                                   //Performing delete operation on DB
             .createQueryBuilder()
             .delete()
             .from(InteressenAktivitaetenEntity)

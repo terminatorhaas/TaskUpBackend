@@ -8,6 +8,7 @@ import { UserKalenderEntity } from '../userKalender.models/userKalender.entity';
 @Injectable()
 export class UserKalenderService {
 
+    //creating local repository, plus loading of necessary external service modules
     constructor(
         @InjectRepository(UserKalenderEntity) private readonly userKalenderRepository: Repository<UserKalenderEntity>,
 
@@ -19,14 +20,14 @@ export class UserKalenderService {
     async findUsersToKalender(calendarID: number): Promise<string[]> {
         let usernames: string[] = [];
 
-        const userCalendar = await getConnection()
+        const userCalendar = await getConnection()                                      //Performing select operation on DB
             .getRepository(UserKalenderEntity)
             .createQueryBuilder("userKalender")
             .where("userKalender.kalenderID = :calendar", { calendar: calendarID })
             .getMany();
 
         for (var i = 0; i < userCalendar.length; i++) {
-            usernames.push(String(userCalendar[i].username))
+            usernames.push(String(userCalendar[i].username))                            //just usernames are needed --> extraction of those
         }
         return usernames;
 
@@ -36,21 +37,22 @@ export class UserKalenderService {
 
         let calendarIDs: number[] = [];
 
-        const userKalender = await getConnection()
+        const userKalender = await getConnection()                                      //Performing select operation on DB
             .getRepository(UserKalenderEntity)
             .createQueryBuilder("userKalender")
             .where("userKalender.username = :username", { username: username })
             .getMany();
 
         for (var i = 0; i < userKalender.length; i++) {
-            calendarIDs.push(Number(userKalender[i].kalenderID))
+            calendarIDs.push(Number(userKalender[i].kalenderID))                        //just IDs are needed --> extraction of those
         }
 
         return calendarIDs;
     }
 
+    //add new relation
     async insertNewUserKalenderTie(calendarID: number, username: string) {
-        await getConnection()
+        await getConnection()                                                           //Performing insert operation on DB
             .createQueryBuilder()
             .insert()
             .into(UserKalenderEntity)
@@ -61,9 +63,10 @@ export class UserKalenderService {
             .execute();
     }
 
+    //Delete specific relation
     async deleteUserKalenderTie(calendarID: number, username: string) {
 
-        await getConnection()
+        await getConnection()                                                           //Performing delete operation on DB
             .createQueryBuilder()
             .delete()
             .from(UserKalenderEntity)
@@ -74,9 +77,10 @@ export class UserKalenderService {
             .execute();
     }
 
+    //Used to ensure that integrity constraints of DB are met
     async deleteAllTiesToUser(username: string) {
 
-        await getConnection()
+        await getConnection()                                                           //Performing delete operation on DB
             .createQueryBuilder()
             .delete()
             .from(UserKalenderEntity)
@@ -86,9 +90,10 @@ export class UserKalenderService {
             .execute();
     }
 
+    //Used to ensure that integrity constraints of DB are met
     async deleteAllTiesToKalender(calendarID: number) {
 
-        await getConnection()
+        await getConnection()                                                           //Performing delete operation on DB
             .createQueryBuilder()
             .delete()
             .from(UserKalenderEntity)

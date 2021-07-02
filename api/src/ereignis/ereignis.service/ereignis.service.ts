@@ -9,6 +9,7 @@ import { Ereignis } from '../ereignis.models/ereignis.interface';
 @Injectable()
 export class EreignisService {
 
+    //creating local repository
     constructor(
         @InjectRepository(EreignisEntity) private readonly ereignisRepository: Repository<EreignisEntity>,
     ) { }
@@ -32,8 +33,8 @@ export class EreignisService {
 
 
     findEreignisseToKalender(calendarID: number): Observable<Ereignis[]> {
-        return from(this.selectEreignisseToKalender(calendarID)).pipe(switchMap((eventIDs: number[]) => {
-            return this.ereignisRepository.find({
+        return from(this.selectEreignisseToKalender(calendarID)).pipe(switchMap((eventIDs: number[]) => {   //returns eventIDs
+            return this.ereignisRepository.find({                                                           //find actual activity entities to IDs
                 ereignisId: In(eventIDs)
             });
         }));
@@ -41,24 +42,24 @@ export class EreignisService {
 
 
     async selectEreignisseToKalender(calendarID: number): Promise<number[]> {
-        let events: number[] = [];
+        let eventIDs: number[] = []; //array to contain output IDs
 
-        const eventsToCalendar = await getConnection()
+        const eventsToCalendar = await getConnection()                                                      //Performing select operation on DB
             .getRepository(EreignisEntity)
             .createQueryBuilder("ereignisse")
             .where("ereignisse.kalenderId = :calendar", { calendar: calendarID })
             .getMany();
 
         for (var i = 0; i < eventsToCalendar.length; i++) {
-            events.push(Number(eventsToCalendar[i].ereignisId))
+            eventIDs.push(Number(eventsToCalendar[i].ereignisId))                                           //just IDs are needed --> extraction of those
         }
 
-        return events;
+        return eventIDs;
     }
 
     async deleteAllTiesToKalender(calendarID: number) {
 
-        await getConnection()
+        await getConnection()                                                                               //Performing Delete operation on DB
             .createQueryBuilder()
             .delete()
             .from(EreignisEntity)

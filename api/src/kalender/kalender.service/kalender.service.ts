@@ -10,6 +10,7 @@ import { Kalender } from '../kalender.models/kalender.interface';
 @Injectable()
 export class KalenderService {
 
+    //creating local repository, plus loading of necessary external service modules
     constructor(
         @InjectRepository(KalenderEntity) private readonly kalenderRepository: Repository<KalenderEntity>,
 
@@ -21,7 +22,6 @@ export class KalenderService {
     create(calendar: Kalender): Observable<Kalender> {
         return from(this.kalenderRepository.save(calendar));
     }
-
 
     findOne(calendarID: number): Observable<Kalender> {
         return from(this.kalenderRepository.findOne({ 'kalenderID': calendarID }));
@@ -46,8 +46,8 @@ export class KalenderService {
     }
 
     getKalenderToUser(username: string): Observable<Kalender[]> {
-        return from(this.userKalenderService.findKalenderToUser(username)).pipe(switchMap((calendarIDs: number[]) => {
-            return this.kalenderRepository.find({
+        return from(this.userKalenderService.findKalenderToUser(username)).pipe(switchMap((calendarIDs: number[]) => {  //returns IDs of calendar belonging to User
+            return this.kalenderRepository.find({                                                                       //find actual calendar entities to IDs
                 kalenderID: In(calendarIDs)
             });
         }));

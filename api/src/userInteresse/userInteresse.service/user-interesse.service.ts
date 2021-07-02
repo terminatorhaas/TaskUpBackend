@@ -8,6 +8,7 @@ import { UserInteresseEntity } from '../userInteresse.models/userInteresse.entit
 @Injectable()
 export class UserInteresseService {
 
+    //creating local repository, plus loading of necessary external service modules
     constructor(
         @InjectRepository(UserInteresseEntity) private readonly userInteresseRepository: Repository<UserInteresseEntity>,
 
@@ -16,7 +17,7 @@ export class UserInteresseService {
     ) { }
 
     findUserToInteresse(interestID: number): Observable<UserInteresseEntity[]> {
-        return from(this.userInteresseRepository.find({
+        return from(this.userInteresseRepository.find({                             //Performing select operation on DB
             select: ["username"],
             where: { interessenID: interestID }
         }));
@@ -24,25 +25,24 @@ export class UserInteresseService {
 
 
     async findInteressenToUser(username: string): Promise<number[]> {
-
-
         let interestIDs: number[] = [];
 
-        const userInterests = await getConnection()
+        const userInterests = await getConnection()                                 //Performing select operation on DB
             .getRepository(UserInteresseEntity)
             .createQueryBuilder("userInteressen")
             .where("userInteressen.username = :user", { user: username })
             .getMany();
 
         for (var i = 0; i < userInterests.length; i++) {
-            interestIDs.push(Number(userInterests[i].interessenID))
+            interestIDs.push(Number(userInterests[i].interessenID))                 //just IDs are needed --> extraction of those
         }
 
         return interestIDs;
     }
 
+    //add new relation
     async insertNewUserInteresseTie(interestID: number, username: string) {
-        await getConnection()
+        await getConnection()                                                       //Performing insert operation on DB
             .createQueryBuilder()
             .insert()
             .into(UserInteresseEntity)
@@ -53,9 +53,10 @@ export class UserInteresseService {
             .execute();
     }
 
+    //Delete specific relation
     async deleteUserInteresseTie(interestID: number, username: string) {
 
-        await getConnection()
+        await getConnection()                                                       //Performing delete operation on DB
             .createQueryBuilder()
             .delete()
             .from(UserInteresseEntity)
@@ -66,9 +67,10 @@ export class UserInteresseService {
             .execute();
     }
 
+    //Used to ensure that integrity constraints of DB are met
     async deleteAllTiesToUser(username: string) {
 
-        await getConnection()
+        await getConnection()                                                       //Performing delete operation on DB
             .createQueryBuilder()
             .delete()
             .from(UserInteresseEntity)
@@ -78,9 +80,10 @@ export class UserInteresseService {
             .execute();
     }
 
+    //Used to ensure that integrity constraints of DB are met
     async deleteAllTiesToInteresse(interestID: number) {
 
-        await getConnection()
+        await getConnection()                                                       //Performing delete operation on DB
             .createQueryBuilder()
             .delete()
             .from(UserInteresseEntity)

@@ -21,6 +21,8 @@ import { Aktivitaeten } from 'src/aktivitaeten/aktivitaeten.models/aktivitaeten.
 @Injectable()
 export class UserService {
 
+    //creating local repository, plus loading of necessary external service modules
+    //since this service class accesses many different global methods, as many service classes need to be injected
     constructor(
         @InjectRepository(UserEntity) private readonly userRepository: Repository<UserEntity>,
         @Inject(forwardRef(() => InteressenService))
@@ -45,27 +47,27 @@ export class UserService {
 
 
     create(user: User): Observable<any> {
-        return this.authService.hashPassword(user.passwort).pipe(
+        return this.authService.hashPassword(user.passwort).pipe(       //build hash of password entered at register screen
             switchMap((passwordHash: string) => {
 
-                const newUser = new UserEntity();
+                const newUser = new UserEntity();                       //assigning of parameters given at register screen
                 newUser.username = user.username;
                 newUser.email = user.email;
-                newUser.passwort = passwordHash;
+                newUser.passwort = passwordHash;                        //hashed password instead of plain text password (for security reasons)           
                 newUser.vorname = user.vorname;
                 newUser.nachname = user.nachname;
                 newUser.zeitzone = user.zeitzone;
                 newUser.role = UserRole.USER;
                 newUser.interessens = [];
 
-                return this.checkIfUserExists(newUser.username).pipe(switchMap((match: boolean) => {
+                return this.checkIfUserExists(newUser.username).pipe(switchMap((match: boolean) => {    //if User already exists, throw an error and abort user creation process
                     if (match) {
                         throwError;
                         return null;
-                    } else {
+                    } else {                                                                            //if user doesn't already exist, continue by saving user on database
                         return from(this.userRepository.save(newUser)).pipe(
                             map((user: User) => {
-                                const { passwort, ...result } = user;
+                                const { passwort, ...result } = user;                                   //return user BUT extract password out of payload first (for security reasons)   
                                 return result;
                             })
                             ,
@@ -76,8 +78,8 @@ export class UserService {
             }))
     }
 
-    checkIfUserExists(username: string): Observable<boolean> {
-        return this.findOne(username).pipe(
+    checkIfUserExists(username: string): Observable<boolean> {                                          //checks if user exists, used in create() method 
+        return this.findOne(username).pipe(                                                             //returns boolean: true = doesnt exist, false = already exists
             map((user: User) => {
                 if (user != undefined) {
                     return true;
@@ -95,46 +97,45 @@ export class UserService {
     findAll(): Observable<User[]> {
         return from(this.userRepository.find()).pipe(
             map((users: User[]) => {
-                users.forEach(function (v) { delete v.passwort });
+                users.forEach(function (v) { delete v.passwort });                                      //find all users, but extract password out of payload first
                 return users;
             })
         );
     }
 
     deleteOne(username: string): Observable<any> {
-        this.userKalenderService.deleteAllTiesToUser(username);
-        this.userInteressenService.deleteAllTiesToUser(username);
+        this.userKalenderService.deleteAllTiesToUser(username);                                         //remove all relations between calendars and the user to be removed in order to meet integrity constraints
+        this.userInteressenService.deleteAllTiesToUser(username);                                       //remove all relations between interests and the user to be removed in order to meet integrity constraints
         return from(this.userRepository.delete(username));
     }
 
-    updateOne(username: string, user: User): Observable<any> {
+    updateOne(username: string, user: User): Observable<any> {                                          //update user BUT username, email and password can't be changed after creation (login credentails need to be kept secret, username is used as foreign key)
+        delete user.username;
         delete user.email;
         delete user.passwort;
         return from(this.userRepository.update(username, user));
     }
 
-    login(user: User): Observable<string> {
-        return this.validateUser(user.email, user.passwort).pipe(
+    login(user: User): Observable<string> {                                                             
+        return this.validateUser(user.email, user.passwort).pipe(                                       
             switchMap((user: User) => {
-                if (user) {
-                    return this.authService.generateJWT(user).pipe(map((jwt: string) => jwt));
+                if (user) {                                                                             //Wenn Passwort OK, dann JWT Token generieren und zurückgeben
+                    return this.authService.generateJWT(user).pipe(map((jwt: string) => jwt));          
                 } else {
-                    return 'U';
+                    return 'U';                                                                         //Meldung, wenn Passwort falsch
                 }
             })
         )
     }
 
     validateUser(email: string, passwort: string): Observable<User> {
-        return this.findByMail(email).pipe(
-            switchMap((user: User) => this.authService.comparePassword(passwort, user.passwort).pipe(
+        return this.findByMail(email).pipe(                                                             //find by mail since email has to be entered during login
+            switchMap((user: User) => this.authService.comparePassword(passwort, user.passwort).pipe(   
                 map((match: boolean) => {
-                    if (match) {
-                        console.log("Eingegebenes Passwort für User: " + user.username + " stimmt überein.");
+                    if (match) {                                                                        //if password is correct, return user found in db
                         const { passwort, ...result } = user;
                         return result;
                     } else {
-                        console.log("Falsches Passwort für User: " + user.username + ".");
                         return null;
                     }
                 })
@@ -147,7 +148,7 @@ export class UserService {
     }
 
     addTieToInteresse(username: string, interestID: number): void {
-        this.userInteressenService.insertNewUserInteresseTie(interestID, username);
+        this.userInteressenService.insertNewUserInteresseTie(interestID, username);                     //Creates relation of user entity towards an interest
     }
 
 
@@ -156,7 +157,7 @@ export class UserService {
         const { passwort, ...result } = user;
         return this.findOne(username).pipe(switchMap((mappedUser: User) => {
 
-            switch (role) {
+            switch (role) {                                     //check whether entered role is even valid
                 case UserRole.ADMIN: {
                     mappedUser.role = UserRole.ADMIN;
                     break;
@@ -187,26 +188,24 @@ export class UserService {
 
     findKalenderToUser(username: string): Observable<Kalender[]> {
         return this.kalenderService.getKalenderToUser(username);
-
     }
 
     removeTieFromKalender(username: string, calendarID: number) {
         this.userKalenderService.deleteUserKalenderTie(calendarID, username);
     }
 
-    async getUsername(email: string): Promise<String> {
+    async getUsername(email: string): Promise<String> {                             //returns username to specified email
         let username: string;
-        const user = await getConnection()
+        const user = await getConnection()                                          //Performing select operation on DB
             .getRepository(UserEntity)
             .createQueryBuilder("user")
             .where("user.email = :email", { email: email })
             .getOne();
-        username = String(user.username);
+        username = String(user.username);                                           //just need username --> isolation
         return username;
     }
 
-    /* This function return an Aktivitaeten Entity that is randdomized and based on the interests of the user, who is transfered. 
-    */
+    // This function returns a randomized aktivitaeten entity based on the interests of a given user.
     generateProposal(username: string): Observable<Aktivitaeten> {
 
         return this.findInteressenToUser(username).pipe(switchMap((interestsArray: Interessen[]) => {

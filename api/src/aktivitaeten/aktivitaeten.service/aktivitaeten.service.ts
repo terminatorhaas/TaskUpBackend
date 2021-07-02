@@ -12,6 +12,7 @@ import { Aktivitaeten } from '../aktivitaeten.models/aktivitaeten.interface';
 @Injectable()
 export class AktivitaetenService {
 
+    //creating local repository, plus loading of necessary external service modules
     constructor(
         @InjectRepository(AktivitaetenEntity) private readonly aktivitaetenRepository: Repository<AktivitaetenEntity>,
 
@@ -23,7 +24,6 @@ export class AktivitaetenService {
 
     ) { }
 
-        
     create(activity: Aktivitaeten): Observable<Aktivitaeten> {
         return from(this.aktivitaetenRepository.save(activity));
     }
@@ -46,19 +46,19 @@ export class AktivitaetenService {
 
 
     deleteOne(activityID: number): Observable<any> {
-        this.interessenAktivitaetenService.deleteAllTiesToAktivitaet(activityID);
+        this.interessenAktivitaetenService.deleteAllTiesToAktivitaet(activityID);                       //remove all relations between interests and the activityID to be removed in order to meet integrity constraints 
         return from(this.aktivitaetenRepository.delete(activityID));
     }
 
     public findInteressenToAktivitaet(activityID: number): Observable<Interessen[]> {
-        return from(this.interessenService.findInteressenToAktivitaet(activityID));
+        return from(this.interessenService.findInteressenToAktivitaet(activityID));                     //call method in another service (done to keep structure)
     }
 
 
     public findAktivitaetenToInteresse(interestID: number): Observable<Aktivitaeten[]> {
-        return from(this.interessenAktivitaetenService.findAktivitaetenToInteresse(interestID)).pipe(
+        return from(this.interessenAktivitaetenService.findAktivitaetenToInteresse(interestID)).pipe(   //returns activityIDs
             switchMap((activityIDs: number[]) => {
-                return this.aktivitaetenRepository.find({
+                return this.aktivitaetenRepository.find({                                               //find actual activity entities to IDs
                     aktivitaetenID: In(activityIDs)
                 });
             }));
