@@ -174,7 +174,7 @@ export class UserService {
     }
 
     findInteressenToUser(username: string): Observable<Interessen[]> {
-        return this.interessenService.getInteresseToUser(username);
+        return this.interessenService.findInteressenToUser(username);
     }
 
     deleteTieFromInteresse(username: string, interestID: number): void {

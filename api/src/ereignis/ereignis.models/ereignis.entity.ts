@@ -43,22 +43,4 @@ export class EreignisEntity {
 
   @Column("datetime", { name: "ende_datum_uhr" })
   endeDatumUhr: Date;
-
-  /*
-  @ManyToOne(() => AktivitaetenEntity, (aktivitaeten) => aktivitaeten.ereignis, {
-    onDelete: "RESTRICT",
-    onUpdate: "RESTRICT",
-  })
-  @JoinColumn([
-    { name: "aktivitaetenID", referencedColumnName: "aktivitaetenID" },
-  ])
-  aktivitaeten: number;
-
-  @ManyToOne(() => KalenderEntity, (kalender) => kalender.ereignis, {
-    onDelete: "RESTRICT",
-    onUpdate: "RESTRICT",
-  })
-  @JoinColumn([{ name: "kalenderID", referencedColumnName: "kalenderID" }])
-  kalender: number;
-  */
 }

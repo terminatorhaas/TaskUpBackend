@@ -1,7 +1,6 @@
 import { InteressenAktivitaetenEntity } from "src/interessenAktivitaeten/interessenAktivitaeten.models/interessenAktivitaeten.entity";
 import { Column, Entity, JoinTable, ManyToMany, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { EreignisEntity } from "../../ereignis/ereignis.models/ereignis.entity";
-import { InteressenEntity } from "../../interessen/interessen.models/Interessen.entity";
 
 @Entity("aktivitaeten", { schema: "taskUPdb" })
 export class AktivitaetenEntity {

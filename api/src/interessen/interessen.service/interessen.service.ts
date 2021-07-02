@@ -1,13 +1,11 @@
 import { forwardRef, Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { FindRelationsNotFoundError, In, Like, Raw, Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import { InteressenEntity } from '../interessen.models/Interessen.entity';
 import { Observable, from, throwError } from 'rxjs';
 import { switchMap, map, catchError } from 'rxjs/operators';
 import { Interessen } from '../interessen.models/interessen.interface';
 import { UserInteresseService } from 'src/userInteresse/userInteresse.service/user-interesse.service';
-import { User } from 'src/user/user.models/user.interface';
-import { UserInteresse } from 'src/userInteresse/userInteresse.models/userInteresse';
 import { UserService } from 'src/user/user.service/user.service';
 import { InteressenAktivitaetenService } from 'src/interessenAktivitaeten/interessenAktivitaeten.service/interessenAktivitaeten.service';
 import { AktivitaetenService } from 'src/aktivitaeten/aktivitaeten.service/aktivitaeten.service';
@@ -15,6 +13,8 @@ import { Aktivitaeten } from 'src/aktivitaeten/aktivitaeten.models/aktivitaeten.
 
 @Injectable()
 export class InteressenService {
+
+    //creating local repository, plus loading of necessary external service modules    
     constructor(
         @InjectRepository(InteressenEntity) private readonly interessenRepository: Repository<InteressenEntity>,
         @Inject(forwardRef(() => UserInteresseService))
@@ -33,83 +33,68 @@ export class InteressenService {
 
     ) { }
 
-    create(interesse: Interessen): Observable<Interessen> {
-        console.log('interessenBezeichnung  = ' + interesse.interessenBezeichnung);
-        const neuesInteresse = new InteressenEntity();
-        console.log('interessenID  = ' + interesse.interessenID);
-        neuesInteresse.interessenBezeichnung = interesse.interessenBezeichnung;
-
-        return from(this.interessenRepository.save(neuesInteresse));
+    create(interest: Interessen): Observable<Interessen> {
+        const newInterest = new InteressenEntity();                              //create new entity, assign value, save
+        newInterest.interessenBezeichnung = interest.interessenBezeichnung;
+        return from(this.interessenRepository.save(newInterest));
     }
 
 
-    findOne(interessenID: number): Observable<Interessen> {
-        console.log("Suche nach Interesse " + interessenID);
-        return from(this.interessenRepository.findOne(interessenID));
+    findOne(interestID: number): Observable<Interessen> {
+        return from(this.interessenRepository.findOne(interestID));
     }
 
     findAll(): Observable<Interessen[]> {
         return from(this.interessenRepository.find()).pipe(
             map((interessen: Interessen[]) => {
-                console.log("Alle Interessen gefunden");
                 return interessen;
             })
         );
     }
 
-    updateOne(interessenID: number, interesse: Interessen): Observable<any> {
-        console.log("Interesse: " + interessenID + " geändert.");
-        return this.findOne(interessenID).pipe(
-            switchMap((oldInteresse: Interessen) => { return this.interessenRepository.update(oldInteresse.interessenID, interesse) }))
+    updateOne(interestID: number, interest: Interessen): Observable<any> {
+    return from(this.interessenRepository.update(interestID, interest));
     }
 
 
-    deleteOne(interessenID: number): Observable<any> {
-        console.log("Interessen: " + interessenID + " gelöscht.");
-        this.userInteresseService.deleteAllTiesToInteresse(interessenID);
-        this.interessenAktivitaetenService.deleteAllTiesToInteresse(interessenID);
-        return from(this.interessenRepository.delete(interessenID));
+    deleteOne(interestID: number): Observable<any> {
+        this.userInteresseService.deleteAllTiesToInteresse(interestID);           //remove all relations between users and the interest to be removed in order to meet integrity constraints
+        this.interessenAktivitaetenService.deleteAllTiesToInteresse(interestID);  //remove all relations between activities and the interest to be removed in order to meet integrity constraints
+        return from(this.interessenRepository.delete(interestID));
     }
 
-    public getInteresse(interessenID: number): Observable<Interessen> {
-        console.log("Suche nach Interesse " + interessenID);
-        return from(this.interessenRepository.findOne(interessenID));
-    }
 
-    public getInteresseToUser(username: string): Observable<Interessen[]> {
 
-        const interessenIds: number[] = [];
+    public findInteressenToUser(username: string): Observable<Interessen[]> {
 
-        return from(this.userInteresseService.findInteressenToUser(username)).pipe(switchMap((interessenIds: number[]) => {
+        return from(this.userInteresseService.findInteressenToUser(username)).pipe(switchMap((interestIDs: number[]) => {  //returns interestIDs
             return this.interessenRepository.find({
-                interessenID: In(interessenIds)
+                interessenID: In(interestIDs)                                                                              //find actual interest entities to IDs
             });
         }));
 
     }
 
 
-    public findInteressenToAktivitaet(aktivitaetenId: number): Observable<Interessen[]> {
-
-        const interessenIds: number[] = [];
+    public findInteressenToAktivitaet(activityID: number): Observable<Interessen[]> {                                      
     
-        return from(this.interessenAktivitaetenService.findInteressenToAktivitaet(aktivitaetenId)).pipe(switchMap((interessenIds: number[]) => {
+        return from(this.interessenAktivitaetenService.findInteressenToAktivitaet(activityID)).pipe(switchMap((interestIDs: number[]) => { //returns interestIDs
             return this.interessenRepository.find({
-                interessenID: In(interessenIds)
+                interessenID: In(interestIDs)                                                                                              //find actual interest entities to IDs
             });
         }));
     }
 
-    public findAktivitaetenToInteresse(interessenId: number): Observable<Aktivitaeten[]> {
-        return from(this.aktivitaetenService.findAktivitaetenToInteresse(interessenId));
+    public findAktivitaetenToInteresse(interestID: number): Observable<Aktivitaeten[]> {
+        return from(this.aktivitaetenService.findAktivitaetenToInteresse(interestID));
     }
 
-    public removeInteressenAktivitaetenTie(interessenId: number, aktivitaetenId: number) {
-         return this.interessenAktivitaetenService.deleteAktivitaetenInteresseTie(interessenId, aktivitaetenId);
+    public removeInteressenAktivitaetenTie(interestID: number, activityID: number) {
+        return this.interessenAktivitaetenService.deleteAktivitaetenInteresseTie(interestID, activityID);
     }
 
-    addTieToAktivitaet(interessenId: number, aktivitaetenId: number): void {
-        this.interessenAktivitaetenService.insertNewAktivitaetenInteresseTie(interessenId, aktivitaetenId);
+    addTieToAktivitaet(interestID: number, activityID: number): void {
+        this.interessenAktivitaetenService.insertNewAktivitaetenInteresseTie(interestID, activityID);
     }
 
 
