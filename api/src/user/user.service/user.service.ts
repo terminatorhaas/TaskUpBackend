@@ -194,16 +194,20 @@ export class UserService {
         this.userKalenderService.deleteUserKalenderTie(calendarID, username);
     }
 
-    async getUsername(email: string): Promise<String> {                             //returns username to specified email
-        let username: string;
+    async getUsernameRole(email: string): Promise<String[]> {                             //returns username to specified email
+        let returnArray: string[] = [];
         const user = await getConnection()                                          //Performing select operation on DB
             .getRepository(UserEntity)
             .createQueryBuilder("user")
             .where("user.email = :email", { email: email })
             .getOne();
-        username = String(user.username);                                           //just need username --> isolation
-        return username;
+            returnArray.push(String(user.username));
+            returnArray.push(String(user.role));                                           //just need username --> isolation
+        return returnArray;
     }
+
+
+
 
     // This function returns a randomized aktivitaeten entity based on the interests of a given user.
     generateProposal(username: string): Observable<Aktivitaeten> {

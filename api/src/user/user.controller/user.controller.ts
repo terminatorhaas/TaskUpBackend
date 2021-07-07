@@ -37,10 +37,11 @@ export class UserController {
         return from(this.userService.login(user)).pipe(
             switchMap((jwt: string) => {
                 if(jwt != "U") {
-                    return from(this.userService.getUsername(user.email)).pipe(
-                        map((username: string) => {
+                    return from(this.userService.getUsernameRole(user.email)).pipe(
+                        map((mappedCredentials: string[]) => {
+
                             var timeout: string = this.configService.get('JWT_TIMEOUT');
-                            return {access_token: jwt, username: username, timeout: timeout};
+                            return {access_token: jwt, username: mappedCredentials[0], role: mappedCredentials[1], timeout: timeout};
                         }))}
                 
                 else {
