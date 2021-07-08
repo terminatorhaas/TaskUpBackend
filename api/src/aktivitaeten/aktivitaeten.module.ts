@@ -1,7 +1,6 @@
 import { forwardRef, Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from 'src/auth/auth.module';
-import { RolesGuard } from 'src/auth/guards/roles.guard';
 import { InteressenModule } from 'src/interessen/interessen.module';
 import { InteressenAktivitaetenModule } from 'src/interessenAktivitaeten/interessenAktivitaeten.module';
 import { UserModule } from 'src/user/user.module';
