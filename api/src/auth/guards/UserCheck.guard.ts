@@ -14,7 +14,9 @@ export class UserCheckGuard implements CanActivate{
     ) {
 
     }
-
+    // this function check if the user, who is provided in the JWT Token is the same as the one that is given by the Request
+    // this is a security feature, so no data can by exploited or changed unauthorized. 
+    // if this function returns false, the request gets answered with an HTTP Code 401
     canActivate(context: ExecutionContext): boolean | Promise<boolean> | Observable<boolean> {
         const request = context.switchToHttp().getRequest();
 
